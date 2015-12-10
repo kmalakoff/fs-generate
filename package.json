@@ -1,0 +1,37 @@
+{
+  "name": "fs-generate",
+  "version": "1.0.0",
+  "description": "Utilities to set up file system structures (directories, files, and symlinks)",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha . test/**/*.test.js",
+    "testDebugger": "iron-node node_modules/.bin/_mocha . test/**/*.test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kmalakoff/fs-generate.git"
+  },
+  "keywords": [
+    "fs",
+    "generate",
+    "fixtures"
+  ],
+  "author": "Kevin Malakoff <kmalakoff@gmail.com> (https://github.com/kmalakoff)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kmalakoff/fs-generate/issues"
+  },
+  "homepage": "https://github.com/kmalakoff/fs-generate#readme",
+  "dependencies": {
+    "async-each-series": "^1.1.0",
+    "fs-extra": "^0.26.2"
+  },
+  "devDependencies": {
+    "async": "^1.5.0",
+    "chai": "^3.4.1",
+    "mocha": "^2.3.4",
+    "sinon": "^1.17.2",
+    "sinon-chai": "^2.8.0",
+    "walk-filtered": "^0.7.0"
+  }
+}
