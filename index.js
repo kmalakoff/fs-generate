@@ -2,6 +2,8 @@ var sysPath = require('path');
 var fs = require('fs-extra');
 var eachSeries = require('async-each-series');
 
+function startsWith(string, start) { return (string.substring(0, start.length) === start); }
+
 function directory(path, callback) {
   fs.lstat(path, function(err, stat) {
     if (!stat) fs.mkdirs(path, callback);
@@ -48,7 +50,7 @@ module.exports = function(dir, structure, callback) {
     fs.mkdirs(sysPath.dirname(fullPath), function(err) {
       if (err) return callback(err);
 
-      if (!contents.startsWith('~'))
+      if (!startsWith(contents, '~'))
         file(fullPath, contents, callback);
       else
         symlink(sysPath.join(dir, contents.slice(1).split('/').join(sysPath.sep)), fullPath, callback);
