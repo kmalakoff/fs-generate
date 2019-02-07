@@ -3,18 +3,7 @@ module.exports = {
   parser: 'babel-eslint',
   env: {
     es6: true,
-    node: true
-  },
-  plugins: ['import'],
-  settings: {
-    'import/resolver': {
-      node: { extensions: ['.mjs', '.js', '.json'] }
-    }
-  },
-  parserOptions: {
-    sourceType: 'module'
-  },
-  rules: {
-    'import/extensions': ['error', 'always', { js: 'never', mjs: 'never' }]
+    node: true,
+    mocha: true
   }
 };

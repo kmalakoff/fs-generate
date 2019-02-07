@@ -12,12 +12,8 @@ var statsSpys = require('../utils').statsSpys;
 var DIR = sysPath.join(__dirname, 'dest');
 
 describe('replace', function() {
-  beforeEach(function(callback) {
-    fs.remove(DIR, callback);
-  });
-  after(function(callback) {
-    fs.remove(DIR, callback);
-  });
+  beforeEach(() => fs.remove(DIR));
+  after(() => fs.remove(DIR));
 
   it('should create the expected structure (updating mis-matched)', function(callback) {
     function genMismatched(callback) {
@@ -46,6 +42,7 @@ describe('replace', function() {
           },
           true,
           function(err) {
+            assert.notExists(err);
             assert.equal(spys.dir.callCount, 8);
             assert.equal(spys.file.callCount, 4);
             assert.equal(spys.link.callCount, 2);
@@ -81,6 +78,7 @@ describe('replace', function() {
           },
           true,
           function(err) {
+            assert.notExists(err);
             assert.equal(spys.dir.callCount, 6);
             assert.equal(spys.file.callCount, 5);
             assert.equal(spys.link.callCount, 3);
