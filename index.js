@@ -3,7 +3,7 @@ var fs = require('fs-extra');
 var eachSeries = require('async-each-series');
 
 function startsWith(string, start) {
-  return string.substring(0, start.length) === start;
+  return typeof string === 'string' && string.substring(0, start.length) === start;
 }
 
 function directory(path, callback) {
