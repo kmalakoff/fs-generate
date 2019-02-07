@@ -1,4 +1,5 @@
-var chai = require('chai'); chai.use(require('sinon-chai'));
+var chai = require('chai');
+chai.use(require('sinon-chai'));
 var assert = chai.assert;
 
 var fs = require('fs-extra');
@@ -10,23 +11,27 @@ var statsSpys = require('../utils').statsSpys;
 
 var DIR = sysPath.join(__dirname, 'dest');
 
-describe("replace", function() {
-  beforeEach(function(callback) { fs.remove(DIR, callback); })
-  after(function(callback) { fs.remove(DIR, callback); })
+describe('replace', function() {
+  beforeEach(function(callback) {
+    fs.remove(DIR, callback);
+  });
+  after(function(callback) {
+    fs.remove(DIR, callback);
+  });
 
-  it("should create the expected structure (updating mis-matched)", function(callback) {
+  it('should create the expected structure (updating mis-matched)', function(callback) {
     function genMismatched(callback) {
       var spys = statsSpys();
 
       var MISMATCHED_STRUCTURE = {
-        'file1': null,
-        'file2': null,
-        'dir1': 'file',
+        file1: null,
+        file2: null,
+        dir1: 'file',
         'dir2/file1': '~file1',
         'dir2/file2': 'dd',
         'dir3/dir4/file1': 'e',
         'dir3/dir4/dir5': null,
-        'link1': 'file',
+        link1: 'file',
         'dir3/link2': '~dir2/file1',
         'dir3/dir4/link3': null
       };
@@ -34,12 +39,19 @@ describe("replace", function() {
       generate(DIR, MISMATCHED_STRUCTURE, function(err) {
         assert.ok(!err);
 
-        walk(DIR, function(path, stats) { spys(stats, path); }, true, function(err) {
-          assert.equal(spys.dir.callCount, 8);
-          assert.equal(spys.file.callCount, 4);
-          assert.equal(spys.link.callCount, 2);
-          callback();
-        });
+        walk(
+          DIR,
+          function(path, stats) {
+            spys(stats, path);
+          },
+          true,
+          function(err) {
+            assert.equal(spys.dir.callCount, 8);
+            assert.equal(spys.file.callCount, 4);
+            assert.equal(spys.link.callCount, 2);
+            callback();
+          }
+        );
       });
     }
 
@@ -47,14 +59,14 @@ describe("replace", function() {
       var spys = statsSpys();
 
       var STRUCTURE = {
-        'file1': 'a',
-        'file2': 'b',
-        'dir1': null,
+        file1: 'a',
+        file2: 'b',
+        dir1: null,
         'dir2/file1': 'c',
         'dir2/file2': 'd',
         'dir3/dir4/file1': 'e',
         'dir3/dir4/dir5': null,
-        'link1': '~dir3/dir4/file1',
+        link1: '~dir3/dir4/file1',
         'dir3/link2': '~dir2/file1',
         'dir3/dir4/link3': '~dir2'
       };
@@ -62,15 +74,22 @@ describe("replace", function() {
       generate(DIR, STRUCTURE, function(err) {
         assert.ok(!err);
 
-        walk(DIR, function(path, stats) { spys(stats, path); }, true, function(err) {
-          assert.equal(spys.dir.callCount, 6);
-          assert.equal(spys.file.callCount, 5);
-          assert.equal(spys.link.callCount, 3);
-          callback();
-        });
+        walk(
+          DIR,
+          function(path, stats) {
+            spys(stats, path);
+          },
+          true,
+          function(err) {
+            assert.equal(spys.dir.callCount, 6);
+            assert.equal(spys.file.callCount, 5);
+            assert.equal(spys.link.callCount, 3);
+            callback();
+          }
+        );
       });
     }
 
-    async.series([genMismatched, gen], callback)
+    async.series([genMismatched, gen], callback);
   });
 });
