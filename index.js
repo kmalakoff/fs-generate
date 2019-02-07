@@ -8,7 +8,7 @@ function startsWith(string, start) {
 
 function directory(path, callback) {
   fs.lstat(path, function(err, stat) {
-    if (!stat) fs.mkdirs(path, callback);
+    if (err || !stat) fs.mkdirs(path, callback);
     else if (!stat.isDirectory())
       fs.remove(path, function(err) {
         err ? callback(err) : fs.mkdirs(path, callback);
@@ -19,7 +19,7 @@ function directory(path, callback) {
 
 function file(path, contents, callback) {
   fs.lstat(path, function(err, stat) {
-    if (!stat) fs.outputFile(path, contents, 'utf8', callback);
+    if (err || !stat) fs.outputFile(path, contents, 'utf8', callback);
     else if (!stat.isFile())
       fs.remove(path, function(err) {
         err ? callback(err) : fs.outputFile(path, contents, 'utf8', callback);
@@ -36,7 +36,7 @@ function file(path, contents, callback) {
 
 function symlink(target, path, callback) {
   fs.lstat(path, function(err, stat) {
-    if (!stat) fs.symlink(target, path, callback);
+    if (err || !stat) fs.symlink(target, path, callback);
     else if (!stat.isSymbolicLink())
       fs.remove(path, function(err) {
         err ? callback(err) : fs.symlink(target, path, callback);
@@ -85,15 +85,11 @@ function generate(dir, structure, callback) {
   );
 }
 module.exports = function(dir, structure, callback) {
-  if (arguments.length === 2) {
-    return new Promise(function(resolve, reject) {
-      generate(dir, structure, function(err) {
-        err ? reject(err) : callback(null, dir);
-      });
-    });
-  } else {
+  if (arguments.length === 3) return generate(dir, structure, callback);
+
+  return new Promise(function(resolve, reject) {
     generate(dir, structure, function(err) {
-      err ? callback(err) : callback(null, dir);
+      err ? reject(err) : resolve();
     });
-  }
+  });
 };

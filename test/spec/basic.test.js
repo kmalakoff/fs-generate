@@ -23,13 +23,9 @@ var STRUCTURE = {
   'dir3/dir4/link3': '~dir2'
 };
 
-describe('basic', function() {
-  beforeEach(function(callback) {
-    fs.remove(DIR, callback);
-  });
-  after(function(callback) {
-    fs.remove(DIR, callback);
-  });
+describe('basic', () => {
+  beforeEach(() => fs.remove(DIR));
+  after(() => fs.remove(DIR));
 
   it('should create the expected structure (clean)', function(callback) {
     var spys = statsSpys();
@@ -42,8 +38,8 @@ describe('basic', function() {
         function(path, stats) {
           spys(stats, path);
         },
-        true,
         function(err) {
+          assert.notExists(err);
           assert.equal(spys.dir.callCount, 6);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 3);
@@ -65,8 +61,8 @@ describe('basic', function() {
           function(path, stats) {
             spys(stats, path);
           },
-          true,
           function(err) {
+            assert.notExists(err);
             assert.equal(spys.dir.callCount, 6);
             assert.equal(spys.file.callCount, 5);
             assert.equal(spys.link.callCount, 3);
