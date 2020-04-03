@@ -3,12 +3,12 @@ chai.use(require('sinon-chai'));
 var assert = chai.assert;
 
 var fs = require('fs-extra');
-var sysPath = require('path');
+var path = require('path');
 var walk = require('walk-filtered');
 var generate = require('../..');
 var statsSpys = require('../utils').statsSpys;
 
-var DIR = sysPath.join(__dirname, 'dest');
+var DIR = path.join(__dirname, 'dest');
 var STRUCTURE = {
   file1: 'a',
   file2: 'b',
@@ -19,7 +19,7 @@ var STRUCTURE = {
   'dir3/dir4/dir5': null,
   link1: '~dir3/dir4/file1',
   'dir3/link2': '~dir2/file1',
-  'dir3/dir4/link3': '~dir2'
+  'dir3/dir4/link3': '~dir2',
 };
 
 describe('promises', () => {

@@ -8,7 +8,7 @@ It will not remove pre-exisiting directories, files, and symlinks so if you need
 **Example**
 
 ```
-var sysPath = require('path');
+var path = require('path');
 var generate = require('fs-generate');
 
 var structure = {
@@ -23,7 +23,7 @@ var structure = {
   'dir3/link2': '~dir2/file1'
 };
 
-generate(sysPath.join(__dirname, 'dest'), structure, function(err) { /* done */ });
+generate(path.join(__dirname, 'dest'), structure, function(err) { /* done */ });
 
 /*
 - dest

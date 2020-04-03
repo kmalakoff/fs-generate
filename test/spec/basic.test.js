@@ -3,13 +3,13 @@ chai.use(require('sinon-chai'));
 var assert = chai.assert;
 
 var fs = require('fs-extra');
-var sysPath = require('path');
+var path = require('path');
 var async = require('async');
 var walk = require('walk-filtered');
 var generate = require('../..');
 var statsSpys = require('../utils').statsSpys;
 
-var DIR = sysPath.join(__dirname, 'dest');
+var DIR = path.join(__dirname, 'dest');
 var STRUCTURE = {
   file1: 'a',
   file2: 'b',
@@ -20,25 +20,25 @@ var STRUCTURE = {
   'dir3/dir4/dir5': null,
   link1: '~dir3/dir4/file1',
   'dir3/link2': '~dir2/file1',
-  'dir3/dir4/link3': '~dir2'
+  'dir3/dir4/link3': '~dir2',
 };
 
 describe('basic', () => {
   beforeEach(() => fs.remove(DIR));
   after(() => fs.remove(DIR));
 
-  it('should create the expected structure (clean)', function(callback) {
+  it('should create the expected structure (clean)', function (callback) {
     var spys = statsSpys();
 
-    generate(DIR, STRUCTURE, function(err) {
+    generate(DIR, STRUCTURE, function (err) {
       assert.ok(!err);
 
       walk(
         DIR,
-        function(path, stats) {
+        function (path, stats) {
           spys(stats, path);
         },
-        function(err) {
+        function (err) {
           assert.notExists(err);
           assert.equal(spys.dir.callCount, 6);
           assert.equal(spys.file.callCount, 5);
@@ -49,19 +49,19 @@ describe('basic', () => {
     });
   });
 
-  it('should create the expected structure (twice)', function(callback) {
+  it('should create the expected structure (twice)', function (callback) {
     function gen(callback) {
       var spys = statsSpys();
 
-      generate(DIR, STRUCTURE, function(err) {
+      generate(DIR, STRUCTURE, function (err) {
         assert.ok(!err);
 
         walk(
           DIR,
-          function(path, stats) {
+          function (path, stats) {
             spys(stats, path);
           },
-          function(err) {
+          function (err) {
             assert.notExists(err);
             assert.equal(spys.dir.callCount, 6);
             assert.equal(spys.file.callCount, 5);
