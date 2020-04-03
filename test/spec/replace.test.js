@@ -3,19 +3,19 @@ chai.use(require('sinon-chai'));
 var assert = chai.assert;
 
 var fs = require('fs-extra');
-var sysPath = require('path');
+var path = require('path');
 var async = require('async');
 var walk = require('walk-filtered');
 var generate = require('../..');
 var statsSpys = require('../utils').statsSpys;
 
-var DIR = sysPath.join(__dirname, 'dest');
+var DIR = path.join(__dirname, 'dest');
 
-describe('replace', function() {
+describe('replace', function () {
   beforeEach(() => fs.remove(DIR));
   after(() => fs.remove(DIR));
 
-  it('should create the expected structure (updating mis-matched)', function(callback) {
+  it('should create the expected structure (updating mis-matched)', function (callback) {
     function genMismatched(callback) {
       var spys = statsSpys();
 
@@ -29,19 +29,19 @@ describe('replace', function() {
         'dir3/dir4/dir5': null,
         link1: 'file',
         'dir3/link2': '~dir2/file1',
-        'dir3/dir4/link3': null
+        'dir3/dir4/link3': null,
       };
 
-      generate(DIR, MISMATCHED_STRUCTURE, function(err) {
+      generate(DIR, MISMATCHED_STRUCTURE, function (err) {
         assert.ok(!err);
 
         walk(
           DIR,
-          function(path, stats) {
+          function (path, stats) {
             spys(stats, path);
           },
           true,
-          function(err) {
+          function (err) {
             assert.notExists(err);
             assert.equal(spys.dir.callCount, 8);
             assert.equal(spys.file.callCount, 4);
@@ -65,19 +65,19 @@ describe('replace', function() {
         'dir3/dir4/dir5': null,
         link1: '~dir3/dir4/file1',
         'dir3/link2': '~dir2/file1',
-        'dir3/dir4/link3': '~dir2'
+        'dir3/dir4/link3': '~dir2',
       };
 
-      generate(DIR, STRUCTURE, function(err) {
+      generate(DIR, STRUCTURE, function (err) {
         assert.ok(!err);
 
         walk(
           DIR,
-          function(path, stats) {
+          function (path, stats) {
             spys(stats, path);
           },
           true,
-          function(err) {
+          function (err) {
             assert.notExists(err);
             assert.equal(spys.dir.callCount, 6);
             assert.equal(spys.file.callCount, 5);
