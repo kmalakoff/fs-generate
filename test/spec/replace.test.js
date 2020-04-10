@@ -37,8 +37,8 @@ describe('replace', function () {
 
         walk(
           DIR,
-          function (path, stats) {
-            spys(stats, path);
+          function (entry) {
+            spys(entry.stats, entry.path);
           },
           true,
           function (err) {
@@ -73,8 +73,8 @@ describe('replace', function () {
 
         walk(
           DIR,
-          function (path, stats) {
-            spys(stats, path);
+          function (entry) {
+            spys(entry.stats, entry.path);
           },
           true,
           function (err) {
