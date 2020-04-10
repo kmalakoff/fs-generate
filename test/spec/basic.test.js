@@ -35,8 +35,8 @@ describe('basic', () => {
 
       walk(
         DIR,
-        function (path, stats) {
-          spys(stats, path);
+        function (entry) {
+          spys(entry.stats, entry.path);
         },
         function (err) {
           assert.notExists(err);
@@ -58,8 +58,8 @@ describe('basic', () => {
 
         walk(
           DIR,
-          function (path, stats) {
-            spys(stats, path);
+          function (entry) {
+            spys(entry.stats, entry.path);
           },
           function (err) {
             assert.notExists(err);

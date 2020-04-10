@@ -30,7 +30,7 @@ describe('promises', () => {
     var spys = statsSpys();
 
     await generate(DIR, STRUCTURE);
-    await walk(DIR, (path, stats) => spys(stats, path));
+    await walk(DIR, (entry) => spys(entry.stats, entry.path));
     assert.equal(spys.dir.callCount, 6);
     assert.equal(spys.file.callCount, 5);
     assert.equal(spys.link.callCount, 3);
@@ -41,7 +41,7 @@ describe('promises', () => {
       var spys = statsSpys();
 
       await generate(DIR, STRUCTURE);
-      await walk(DIR, (path, stats) => spys(stats, path));
+      await walk(DIR, (entry) => spys(entry.stats, entry.path));
     };
 
     await Promise.all([gen, gen]);
