@@ -43,7 +43,7 @@
     "mocha-compat": "^3.5.5",
     "nvs": "^0.1.5",
     "prettier": "^2.0.5",
-    "queue-cb": "^1.1.1",
+    "queue-cb": "^1.1.2",
     "sinon": "^2.4.1",
     "walk-filtered": "^2.4.4"
   }
