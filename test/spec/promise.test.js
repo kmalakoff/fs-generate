@@ -1,9 +1,8 @@
-var chai = require('chai');
-chai.use(require('sinon-chai'));
-var assert = chai.assert;
+var assert = require('assert');
 
-var fs = require('fs-extra');
+var fs = require('fs');
 var path = require('path');
+var remove = require('remove');
 var walk = require('walk-filtered');
 var generate = require('../..');
 var statsSpys = require('../utils').statsSpys;
@@ -22,28 +21,52 @@ var STRUCTURE = {
   'dir3/dir4/link3': '~dir2',
 };
 
-describe('promises', () => {
-  beforeEach(() => fs.remove(DIR));
-  after(() => fs.remove(DIR));
+describe('promises', function () {
+  if (typeof Promise === 'undefined') return; // no promise support
 
-  it('should create the expected structure (clean)', async () => {
-    var spys = statsSpys();
-
-    await generate(DIR, STRUCTURE);
-    await walk(DIR, (entry) => spys(entry.stats, entry.path));
-    assert.equal(spys.dir.callCount, 6);
-    assert.equal(spys.file.callCount, 5);
-    assert.equal(spys.link.callCount, 3);
+  beforeEach(function (callback) {
+    fs.existsSync(DIR) ? remove(DIR, callback) : callback();
+  });
+  after(function (callback) {
+    fs.existsSync(DIR) ? remove(DIR, callback) : callback();
   });
 
-  it('should create the expected structure (twice)', async () => {
-    const gen = async () => {
+  it('should create the expected structure (clean)', function () {
+    var spys = statsSpys();
+
+    return generate(DIR, STRUCTURE).then(function () {
+      walk(
+        DIR,
+        function (entry) {
+          spys(entry.stats, entry.path);
+        },
+        { alwaysStat: true }
+      ).then(function () {
+        assert.equal(spys.dir.callCount, 6);
+        assert.equal(spys.file.callCount, 5);
+        assert.equal(spys.link.callCount, 3);
+      });
+    });
+  });
+
+  it('should create the expected structure (twice)', function () {
+    function gen() {
       var spys = statsSpys();
+      return generate(DIR, STRUCTURE).then(function () {
+        walk(
+          DIR,
+          function (entry) {
+            spys(entry.stats, entry.path);
+          },
+          { alwaysStat: true }
+        ).then(function () {
+          assert.equal(spys.dir.callCount, 6);
+          assert.equal(spys.file.callCount, 5);
+          assert.equal(spys.link.callCount, 3);
+        });
+      });
+    }
 
-      await generate(DIR, STRUCTURE);
-      await walk(DIR, (entry) => spys(entry.stats, entry.path));
-    };
-
-    await Promise.all([gen, gen]);
+    return Promise.all([gen, gen]);
   });
 });
