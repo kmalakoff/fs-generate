@@ -1,11 +1,10 @@
-var chai = require('chai');
-chai.use(require('sinon-chai'));
-var assert = chai.assert;
+var assert = require('assert');
 
-var fs = require('fs-extra');
+var fs = require('fs');
 var path = require('path');
-var async = require('async');
+var remove = require('remove');
 var walk = require('walk-filtered');
+var Queue = require('queue-cb');
 var generate = require('../..');
 var statsSpys = require('../utils').statsSpys;
 
@@ -23,9 +22,13 @@ var STRUCTURE = {
   'dir3/dir4/link3': '~dir2',
 };
 
-describe('basic', () => {
-  beforeEach(() => fs.remove(DIR));
-  after(() => fs.remove(DIR));
+describe('basic', function () {
+  beforeEach(function (callback) {
+    fs.existsSync(DIR) ? remove(DIR, callback) : callback();
+  });
+  after(function (callback) {
+    fs.existsSync(DIR) ? remove(DIR, callback) : callback();
+  });
 
   it('should create the expected structure (clean)', function (callback) {
     var spys = statsSpys();
@@ -38,8 +41,9 @@ describe('basic', () => {
         function (entry) {
           spys(entry.stats, entry.path);
         },
+        { alwaysStat: true },
         function (err) {
-          assert.notExists(err);
+          assert.ok(!err);
           assert.equal(spys.dir.callCount, 6);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 3);
@@ -61,8 +65,9 @@ describe('basic', () => {
           function (entry) {
             spys(entry.stats, entry.path);
           },
+          { alwaysStat: true },
           function (err) {
-            assert.notExists(err);
+            assert.ok(!err);
             assert.equal(spys.dir.callCount, 6);
             assert.equal(spys.file.callCount, 5);
             assert.equal(spys.link.callCount, 3);
@@ -72,6 +77,9 @@ describe('basic', () => {
       });
     }
 
-    async.series([gen, gen], callback);
+    var queue = new Queue(1);
+    queue.defer(gen);
+    queue.defer(gen);
+    queue.await(callback);
   });
 });
