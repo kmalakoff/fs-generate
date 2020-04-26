@@ -1,19 +1,22 @@
-var chai = require('chai');
-chai.use(require('sinon-chai'));
-var assert = chai.assert;
+var assert = require('assert');
 
-var fs = require('fs-extra');
+var fs = require('fs');
 var path = require('path');
-var async = require('async');
+var remove = require('remove');
 var walk = require('walk-filtered');
+var Queue = require('queue-cb');
 var generate = require('../..');
 var statsSpys = require('../utils').statsSpys;
 
 var DIR = path.join(__dirname, 'dest');
 
 describe('replace', function () {
-  beforeEach(() => fs.remove(DIR));
-  after(() => fs.remove(DIR));
+  beforeEach(function (callback) {
+    fs.existsSync(DIR) ? remove(DIR, callback) : callback();
+  });
+  after(function (callback) {
+    fs.existsSync(DIR) ? remove(DIR, callback) : callback();
+  });
 
   it('should create the expected structure (updating mis-matched)', function (callback) {
     function genMismatched(callback) {
@@ -40,9 +43,9 @@ describe('replace', function () {
           function (entry) {
             spys(entry.stats, entry.path);
           },
-          true,
+          { alwaysStat: true },
           function (err) {
-            assert.notExists(err);
+            assert.ok(!err);
             assert.equal(spys.dir.callCount, 8);
             assert.equal(spys.file.callCount, 4);
             assert.equal(spys.link.callCount, 2);
@@ -76,9 +79,9 @@ describe('replace', function () {
           function (entry) {
             spys(entry.stats, entry.path);
           },
-          true,
+          { alwaysStat: true },
           function (err) {
-            assert.notExists(err);
+            assert.ok(!err);
             assert.equal(spys.dir.callCount, 6);
             assert.equal(spys.file.callCount, 5);
             assert.equal(spys.link.callCount, 3);
@@ -88,6 +91,9 @@ describe('replace', function () {
       });
     }
 
-    async.series([genMismatched, gen], callback);
+    var queue = new Queue(1);
+    queue.defer(genMismatched);
+    queue.defer(gen);
+    queue.await(callback);
   });
 });
