@@ -1,8 +1,7 @@
 var assert = require('assert');
 
-var fs = require('fs');
 var path = require('path');
-var remove = require('remove');
+var rimraf = require('rimraf2');
 var walk = require('walk-filtered');
 var Queue = require('queue-cb');
 var statsSpys = require('fs-stats-spys');
@@ -24,14 +23,10 @@ var STRUCTURE = {
 };
 
 describe('basic', function () {
-  beforeEach(function (callback) {
-    fs.existsSync(DIR) ? remove(DIR, callback) : callback();
-  });
-  after(function (callback) {
-    fs.existsSync(DIR) ? remove(DIR, callback) : callback();
-  });
+  beforeEach(rimraf.bind(null, DIR));
+  after(rimraf.bind(null, DIR));
 
-  it('should create the expected structure (clean)', function (callback) {
+  it('should create the expected structure (clean)', function (done) {
     var spys = statsSpys();
 
     generate(DIR, STRUCTURE, function (err) {
@@ -48,14 +43,14 @@ describe('basic', function () {
           assert.equal(spys.dir.callCount, 6);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 3);
-          callback();
+          done();
         }
       );
     });
   });
 
-  it('should create the expected structure (twice)', function (callback) {
-    function gen(callback) {
+  it('should create the expected structure (twice)', function (done) {
+    function gen(done) {
       var spys = statsSpys();
 
       generate(DIR, STRUCTURE, function (err) {
@@ -72,7 +67,7 @@ describe('basic', function () {
             assert.equal(spys.dir.callCount, 6);
             assert.equal(spys.file.callCount, 5);
             assert.equal(spys.link.callCount, 3);
-            callback();
+            done();
           }
         );
       });
@@ -81,6 +76,6 @@ describe('basic', function () {
     var queue = new Queue(1);
     queue.defer(gen);
     queue.defer(gen);
-    queue.await(callback);
+    queue.await(done);
   });
 });
