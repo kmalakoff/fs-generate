@@ -4,8 +4,9 @@ var fs = require('fs');
 var path = require('path');
 var remove = require('remove');
 var walk = require('walk-filtered');
+var statsSpys = require('fs-stats-spys');
+
 var generate = require('../..');
-var statsSpys = require('../utils').statsSpys;
 
 var DIR = path.join(__dirname, 'dest');
 var STRUCTURE = {
@@ -38,7 +39,7 @@ describe('promises', function () {
       walk(
         DIR,
         function (entry) {
-          spys(entry.stats, entry.path);
+          spys(entry.stats);
         },
         { alwaysStat: true }
       ).then(function () {
@@ -56,7 +57,7 @@ describe('promises', function () {
         walk(
           DIR,
           function (entry) {
-            spys(entry.stats, entry.path);
+            spys(entry.stats);
           },
           { alwaysStat: true }
         ).then(function () {
