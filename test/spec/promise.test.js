@@ -1,8 +1,7 @@
 var assert = require('assert');
 
-var fs = require('fs');
 var path = require('path');
-var remove = require('remove');
+var rimraf = require('rimraf2');
 var walk = require('walk-filtered');
 var statsSpys = require('fs-stats-spys');
 
@@ -25,12 +24,8 @@ var STRUCTURE = {
 describe('promises', function () {
   if (typeof Promise === 'undefined') return; // no promise support
 
-  beforeEach(function (callback) {
-    fs.existsSync(DIR) ? remove(DIR, callback) : callback();
-  });
-  after(function (callback) {
-    fs.existsSync(DIR) ? remove(DIR, callback) : callback();
-  });
+  beforeEach(rimraf.bind(null, DIR));
+  after(rimraf.bind(null, DIR));
 
   it('should create the expected structure (clean)', function () {
     var spys = statsSpys();

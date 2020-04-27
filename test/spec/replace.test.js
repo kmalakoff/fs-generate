@@ -1,8 +1,7 @@
 var assert = require('assert');
 
-var fs = require('fs');
 var path = require('path');
-var remove = require('remove');
+var rimraf = require('rimraf2');
 var walk = require('walk-filtered');
 var Queue = require('queue-cb');
 var statsSpys = require('fs-stats-spys');
@@ -12,15 +11,11 @@ var generate = require('../..');
 var DIR = path.join(__dirname, 'dest');
 
 describe('replace', function () {
-  beforeEach(function (callback) {
-    fs.existsSync(DIR) ? remove(DIR, callback) : callback();
-  });
-  after(function (callback) {
-    fs.existsSync(DIR) ? remove(DIR, callback) : callback();
-  });
+  beforeEach(rimraf.bind(null, DIR));
+  after(rimraf.bind(null, DIR));
 
-  it('should create the expected structure (updating mis-matched)', function (callback) {
-    function genMismatched(callback) {
+  it('should create the expected structure (updating mis-matched)', function (done) {
+    function genMismatched(done) {
       var spys = statsSpys();
 
       var MISMATCHED_STRUCTURE = {
@@ -50,13 +45,13 @@ describe('replace', function () {
             assert.equal(spys.dir.callCount, 8);
             assert.equal(spys.file.callCount, 4);
             assert.equal(spys.link.callCount, 2);
-            callback();
+            done();
           }
         );
       });
     }
 
-    function gen(callback) {
+    function gen(done) {
       var spys = statsSpys();
 
       var STRUCTURE = {
@@ -86,7 +81,7 @@ describe('replace', function () {
             assert.equal(spys.dir.callCount, 6);
             assert.equal(spys.file.callCount, 5);
             assert.equal(spys.link.callCount, 3);
-            callback();
+            done();
           }
         );
       });
@@ -95,6 +90,6 @@ describe('replace', function () {
     var queue = new Queue(1);
     queue.defer(genMismatched);
     queue.defer(gen);
-    queue.await(callback);
+    queue.await(done);
   });
 });
