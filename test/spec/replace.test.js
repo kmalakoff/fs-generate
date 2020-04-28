@@ -1,7 +1,7 @@
 var assert = require('assert');
 
 var path = require('path');
-var rimraf = require('rimraf2');
+var rimraf = require('rimraf');
 var Iterator = require('fs-iterator');
 var Queue = require('queue-cb');
 var statsSpys = require('fs-stats-spys');
