@@ -1,6 +1,6 @@
 var path = require('path');
 var fs = require('fs');
-var rimraf = require('rimraf2');
+var rimraf = require('rimraf');
 var mkpath = require('mkpath');
 var eachSeries = require('async-each-series');
 
