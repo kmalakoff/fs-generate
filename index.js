@@ -37,7 +37,7 @@ function symlink(target, path, callback) {
     if (err || !stat) fs.symlink(target, path, callback);
     else if (!stat.isSymbolicLink())
       rimraf(path, function (err) {
-        err ? callback(err) : fs.symlink(target, path, callback);
+        err ? callback(err) : fs.symlink(target, path, stat.isDirectory() ? 'dir' : 'file', callback);
       });
     else {
       fs.realpath(path, function (err, realpath) {
