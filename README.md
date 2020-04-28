@@ -20,8 +20,8 @@ var structure = {
   'dir2/file2': 'd',
   'dir3/dir4/file1': 'e',
   'dir3/dir4/dir5': null,
-  'link1': '~dir3/dir4/file1', // symlink starts with ~
-  'dir3/link2': '~dir2/file1'
+  'filelink1': '~dir3/dir4/file1', // symlink starts with ~
+  'dir3/filelink2': '~dir2/file1'
 };
 
 generate(path.join(__dirname, 'dest'), structure, function(err) { /* done */ });
@@ -30,13 +30,13 @@ generate(path.join(__dirname, 'dest'), structure, function(err) { /* done */ });
 - dest
   - file1
   - file2
-  - link1 (to dir3/dir4/file1)
+  - filelink1 (to dir3/dir4/file1)
   - dir1
   - dir2
     - file1
     - file2
   - dir3
-    - link2 (to dir2/file1)
+    - filelink1 (to dir2/file1)
     - dir4
       - file1
       - dir5
