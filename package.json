@@ -40,7 +40,7 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
     "fs-iterator": "^3.0.1",
-    "fs-stats-spys": "^1.0.0",
+    "fs-stats-spys": "^1.0.1",
     "mocha": "^7.1.2",
     "mocha-compat": "^3.5.5",
     "nvs": "^0.1.8",
