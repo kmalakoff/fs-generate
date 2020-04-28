@@ -2,7 +2,7 @@ var assert = require('assert');
 
 var path = require('path');
 var rimraf = require('rimraf2');
-var walk = require('walk-filtered');
+var Iterator = require('fs-iterator');
 var Queue = require('queue-cb');
 var statsSpys = require('fs-stats-spys');
 
@@ -17,12 +17,12 @@ var STRUCTURE = {
   'dir2/file2': 'd',
   'dir3/dir4/file1': 'e',
   'dir3/dir4/dir5': null,
-  link1: '~dir3/dir4/file1',
-  'dir3/link2': '~dir2/file1',
-  'dir3/dir4/link3': '~dir2',
+  filelink1: '~dir3/dir4/file1',
+  'dir3/filelink2': '~dir2/file1',
+  'dir3/dir4/dirlink1': '~dir2',
 };
 
-describe('basic', function () {
+describe('callback', function () {
   beforeEach(rimraf.bind(null, DIR));
   after(rimraf.bind(null, DIR));
 
@@ -32,16 +32,15 @@ describe('basic', function () {
     generate(DIR, STRUCTURE, function (err) {
       assert.ok(!err);
 
-      walk(
-        DIR,
+      var iterator = new Iterator(DIR, { lstat: true });
+      iterator.forEach(
         function (entry) {
           spys(entry.stats);
         },
-        { alwaysStat: true },
         function (err) {
           assert.ok(!err);
-          assert.equal(spys.dir.callCount, 6);
-          assert.equal(spys.file.callCount, 5);
+          assert.equal(spys.dir.callCount, 5);
+          assert.equal(spys.file.callCount, 7);
           assert.equal(spys.link.callCount, 3);
           done();
         }
@@ -56,16 +55,15 @@ describe('basic', function () {
       generate(DIR, STRUCTURE, function (err) {
         assert.ok(!err);
 
-        walk(
-          DIR,
+        var iterator = new Iterator(DIR, { lstat: true });
+        iterator.forEach(
           function (entry) {
             spys(entry.stats);
           },
-          { alwaysStat: true },
           function (err) {
             assert.ok(!err);
-            assert.equal(spys.dir.callCount, 6);
-            assert.equal(spys.file.callCount, 5);
+            assert.equal(spys.dir.callCount, 5);
+            assert.equal(spys.file.callCount, 7);
             assert.equal(spys.link.callCount, 3);
             done();
           }
