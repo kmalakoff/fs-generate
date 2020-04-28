@@ -4,8 +4,11 @@ var rimraf = require('rimraf2');
 var mkpath = require('mkpath');
 var eachSeries = require('async-each-series');
 
+var fsCompat = require('./lib/fs-compat');
+var STAT_OPTIONS = { bigint: process.platform === 'win32' };
+
 function directory(path, callback) {
-  fs.lstat(path, function (err, stat) {
+  fsCompat.lstat(path, STAT_OPTIONS, function (err, stat) {
     if (err || !stat) mkpath(path, callback);
     else if (!stat.isDirectory())
       rimraf(path, function (err) {
@@ -16,7 +19,7 @@ function directory(path, callback) {
 }
 
 function file(path, contents, callback) {
-  fs.lstat(path, function (err, stat) {
+  fsCompat.lstat(path, STAT_OPTIONS, function (err, stat) {
     if (err || !stat) fs.writeFile(path, contents, 'utf8', callback);
     else if (!stat.isFile())
       rimraf(path, function (err) {
@@ -33,7 +36,7 @@ function file(path, contents, callback) {
 }
 
 function symlink(target, path, callback) {
-  fs.lstat(path, function (err, stat) {
+  fsCompat.lstat(path, STAT_OPTIONS, function (err, stat) {
     if (err || !stat) fs.symlink(target, path, callback);
     else if (!stat.isSymbolicLink())
       rimraf(path, function (err) {
