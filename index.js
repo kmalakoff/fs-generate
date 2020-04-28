@@ -36,22 +36,27 @@ function file(path, contents, callback) {
 }
 
 function symlink(target, path, callback) {
-  fsCompat.lstat(path, STAT_OPTIONS, function (err, stat) {
-    if (err || !stat) fs.symlink(target, path, callback);
-    else if (!stat.isSymbolicLink())
-      rimraf(path, function (err) {
-        err ? callback(err) : fs.symlink(target, path, stat.isDirectory() ? 'dir' : 'file', callback);
-      });
-    else {
-      fs.realpath(path, function (err, realpath) {
-        if (err) callback(err);
-        else if (realpath !== target)
-          rimraf(path, function (err) {
-            err ? callback(err) : fs.symlink(target, path, callback);
-          });
-        else callback();
-      });
-    }
+  fsCompat.lstatReal(target, STAT_OPTIONS, function (err, targetStat) {
+    if (err || !targetStat) return callback(err || new Error('Symlink path does not exist' + target));
+    var type = targetStat.isDirectory() ? 'dir' : 'file';
+
+    fsCompat.lstat(path, STAT_OPTIONS, function (err, stat) {
+      if (err || !stat) fs.symlink(target, path, type, callback);
+      else if (!stat.isSymbolicLink())
+        rimraf(path, function (err) {
+          err ? callback(err) : fs.symlink(target, path, type, callback);
+        });
+      else {
+        fsCompat.realpath(path, function (err, realpath) {
+          if (err) callback(err);
+          else if (realpath !== target)
+            rimraf(path, function (err) {
+              err ? callback(err) : fs.symlink(target, path, type, callback);
+            });
+          else callback();
+        });
+      }
+    });
   });
 }
 
