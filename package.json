@@ -43,7 +43,7 @@
     "fs-stats-spys": "^1.0.1",
     "mocha": "^7.1.2",
     "mocha-compat": "^3.5.5",
-    "nvs": "^0.1.8",
+    "nvs": "^0.2.0",
     "prettier": "^2.0.5",
     "queue-cb": "^1.1.2"
   }
