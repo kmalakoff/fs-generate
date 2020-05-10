@@ -2,28 +2,28 @@
   "name": "fs-generate",
   "version": "1.8.0",
   "description": "Utilities to set up file system structures (directories, files, and symlinks)",
-  "main": "index.js",
-  "scripts": {
-    "test": "mocha test/spec/**/*.test.js",
-    "compat": "nvs 14,12,10,8,6,4,0.12,0.10,0.8 mocha-compat test/spec/**/*.test.js",
-    "lint": "eslint . --ext js,mjs",
-    "format": "prettier --write '**/*.{js,mjs}'"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/kmalakoff/fs-generate.git"
-  },
   "keywords": [
     "fs",
     "generate",
     "fixtures"
   ],
-  "author": "Kevin Malakoff <kmalakoff@gmail.com> (https://github.com/kmalakoff)",
-  "license": "MIT",
+  "homepage": "https://github.com/kmalakoff/fs-generate#readme",
   "bugs": {
     "url": "https://github.com/kmalakoff/fs-generate/issues"
   },
-  "homepage": "https://github.com/kmalakoff/fs-generate#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kmalakoff/fs-generate.git"
+  },
+  "license": "MIT",
+  "author": "Kevin Malakoff <kmalakoff@gmail.com> (https://github.com/kmalakoff)",
+  "main": "index.js",
+  "scripts": {
+    "compat": "nvs --engines mocha-compat test/spec/**/*.test.js",
+    "format": "prettier --write '**/*.{js,mjs}'",
+    "lint": "eslint . --ext js,mjs",
+    "test": "mocha-compat test/spec/**/*.test.js"
+  },
   "dependencies": {
     "async-each-series": "^1.1.0",
     "mkpath": "^1.0.0",
@@ -32,7 +32,7 @@
   "devDependencies": {
     "babel-eslint": "^10.1.0",
     "chai": "^4.2.0",
-    "eslint": "^6.8.0",
+    "eslint": "^7.0.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-config-standard": "^14.1.1",
     "eslint-plugin-import": "^2.20.2",
@@ -41,10 +41,12 @@
     "eslint-plugin-standard": "^4.0.1",
     "fs-iterator": "^3.0.1",
     "fs-stats-spys": "^1.0.1",
-    "mocha": "^7.1.2",
     "mocha-compat": "^3.5.5",
-    "nvs": "^0.2.0",
+    "nvs": "^0.3.0",
     "prettier": "^2.0.5",
     "queue-cb": "^1.1.2"
+  },
+  "engines": {
+    "node": ">=0.8.0"
   }
 }
