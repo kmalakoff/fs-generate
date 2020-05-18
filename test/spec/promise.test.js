@@ -7,7 +7,7 @@ var statsSpys = require('fs-stats-spys');
 
 var generate = require('../..');
 
-var DIR = path.join(__dirname, 'dest');
+var TEST_DIR = path.join(__dirname, 'dest');
 var STRUCTURE = {
   file1: 'a',
   file2: 'b',
@@ -24,14 +24,14 @@ var STRUCTURE = {
 describe('promise', function () {
   if (typeof Promise === 'undefined') return; // no promise support
 
-  beforeEach(rimraf.bind(null, DIR));
-  after(rimraf.bind(null, DIR));
+  beforeEach(rimraf.bind(null, TEST_DIR));
+  after(rimraf.bind(null, TEST_DIR));
 
   it('should create the expected structure (clean)', function () {
     var spys = statsSpys();
 
-    return generate(DIR, STRUCTURE).then(function () {
-      var iterator = new Iterator(DIR, { lstat: true });
+    return generate(TEST_DIR, STRUCTURE).then(function () {
+      var iterator = new Iterator(TEST_DIR, { lstat: true });
       return iterator
         .forEach(function (entry) {
           spys(entry.stats);
@@ -50,8 +50,8 @@ describe('promise', function () {
   it('should create the expected structure (twice)', function () {
     function gen() {
       var spys = statsSpys();
-      return generate(DIR, STRUCTURE).then(function () {
-        var iterator = new Iterator(DIR, { lstat: true });
+      return generate(TEST_DIR, STRUCTURE).then(function () {
+        var iterator = new Iterator(TEST_DIR, { lstat: true });
         return iterator
           .forEach(function (entry) {
             spys(entry.stats);
