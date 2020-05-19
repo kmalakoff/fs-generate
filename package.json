@@ -42,7 +42,7 @@
     "fs-iterator": "^3.0.1",
     "fs-stats-spys": "^1.0.1",
     "mocha-compat": "^3.5.5",
-    "nvs": "^0.4.1",
+    "nvs": "^0.4.2",
     "prettier": "^2.0.5",
     "queue-cb": "^1.1.2"
   },
