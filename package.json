@@ -19,7 +19,6 @@
   "author": "Kevin Malakoff <kmalakoff@gmail.com> (https://github.com/kmalakoff)",
   "main": "index.js",
   "scripts": {
-    "compat": "nvs --engines mocha-compat test/spec/**/*.test.js",
     "format": "prettier --write '**/*.{js,mjs}'",
     "lint": "eslint . --ext js,mjs",
     "test": "mocha-compat test/spec/**/*.test.js"
@@ -42,7 +41,6 @@
     "fs-iterator": "^3.0.3",
     "fs-stats-spys": "^1.0.1",
     "mocha-compat": "^3.5.5",
-    "nvs": "^0.4.4",
     "prettier": "^2.0.5",
     "queue-cb": "^1.1.2"
   },
