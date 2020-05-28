@@ -48,8 +48,7 @@ function symlink(target, path, callback) {
         });
       else {
         fsCompat.realpath(path, function (err, realpath) {
-          if (err) callback(err);
-          else if (realpath !== target)
+          if (err || realpath !== target)
             rimraf(path, function (err) {
               err ? callback(err) : fs.symlink(target, path, type, callback);
             });

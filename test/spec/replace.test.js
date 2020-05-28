@@ -8,11 +8,10 @@ var statsSpys = require('fs-stats-spys');
 
 var generate = require('../..');
 
-var TEST_DIR = path.join(__dirname, 'dest');
+var TEST_DIR = path.join(__dirname, '..', '..', '.tmp');
 
 describe('replace', function () {
   beforeEach(rimraf.bind(null, TEST_DIR));
-  after(rimraf.bind(null, TEST_DIR));
 
   it('should create the expected structure (updating mis-matched)', function (done) {
     function genMismatched(done) {
