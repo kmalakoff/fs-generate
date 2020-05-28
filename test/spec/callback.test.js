@@ -8,7 +8,7 @@ var statsSpys = require('fs-stats-spys');
 
 var generate = require('../..');
 
-var TEST_DIR = path.join(__dirname, 'dest');
+var TEST_DIR = path.join(__dirname, '..', '..', '.tmp');
 var STRUCTURE = {
   file1: 'a',
   file2: 'b',
@@ -24,7 +24,6 @@ var STRUCTURE = {
 
 describe('callback', function () {
   beforeEach(rimraf.bind(null, TEST_DIR));
-  after(rimraf.bind(null, TEST_DIR));
 
   it('should create the expected structure (clean)', function (done) {
     var spys = statsSpys();
