@@ -42,7 +42,7 @@
     "fs-stats-spys": "^1.0.1",
     "mocha-compat": "^3.5.5",
     "prettier": "^2.0.5",
-    "queue-cb": "^1.1.3"
+    "queue-cb": "^1.1.4"
   },
   "engines": {
     "node": ">=0.8.0"
