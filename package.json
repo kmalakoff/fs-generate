@@ -25,7 +25,6 @@
     "test": "mocha-compat test/spec/**/*.test.js"
   },
   "dependencies": {
-    "async-each-series": "^1.1.0",
     "fs.realpath": "^1.0.0",
     "graceful-fs": "^4.2.4",
     "mkpath": "^1.0.0",
