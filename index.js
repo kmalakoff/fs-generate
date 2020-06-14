@@ -1,8 +1,8 @@
 var path = require('path');
-var fs = require('fs');
+var fs = require('graceful-fs');
 var rimraf = require('rimraf');
 var mkpath = require('mkpath');
-var eachSeries = require('async-each-series');
+var Queue = require('queue-cb');
 
 var fsCompat = require('./lib/fs-compat');
 var STAT_OPTIONS = { bigint: process.platform === 'win32' };
@@ -59,24 +59,47 @@ function symlink(target, fullPath, callback) {
   });
 }
 
+function link(target, fullPath, callback) {
+  fsCompat.lstatReal(target, STAT_OPTIONS, function (err, targetStat) {
+    if (err || !targetStat) return callback(err || new Error('Symlink path does not exist' + target));
+
+    fsCompat.lstat(fullPath, STAT_OPTIONS, function (err, stat) {
+      if (err || !stat) fs.link(target, fullPath, callback);
+      else if (!stat.isFile()) {
+        rimraf(fullPath, function (err) {
+          err ? callback(err) : fs.link(target, fullPath, callback);
+        });
+      } else {
+        fsCompat.realpath(fullPath, function (err, realpath) {
+          if (err || realpath !== target)
+            rimraf(fullPath, function (err) {
+              err ? callback(err) : fs.link(target, fullPath, callback);
+            });
+          else callback();
+        });
+      }
+    });
+  });
+}
+
+function generateOne(dir, relativePath, contents, callback) {
+  var fullPath = path.join(dir, relativePath.split('/').join(path.sep));
+  if (!contents) return directory(fullPath, callback);
+  mkpath(path.dirname(fullPath), function (err) {
+    if (err) return callback(err);
+
+    if (contents.length && contents[0] === '~') symlink(path.join(dir, contents.slice(1).split('/').join(path.sep)), fullPath, callback);
+    else if (contents.length && contents[0] === ':') link(path.join(dir, contents.slice(1).split('/').join(path.sep)), fullPath, callback);
+    else file(fullPath, contents, callback);
+  });
+}
+
 function generate(dir, structure, callback) {
-  eachSeries(
-    Object.keys(structure),
-    function (relativePath, callback) {
-      var fullPath = path.join(dir, relativePath.split('/').join(path.sep));
-
-      var contents = structure[relativePath];
-      if (!contents) return directory(fullPath, callback);
-
-      mkpath(path.dirname(fullPath), function (err) {
-        if (err) return callback(err);
-
-        if (contents.length && contents[0] === '~') symlink(path.join(dir, contents.slice(1).split('/').join(path.sep)), fullPath, callback);
-        else file(fullPath, contents, callback);
-      });
-    },
-    callback
-  );
+  var queue = new Queue(1);
+  for (var relativePath in structure) {
+    queue.defer(generateOne.bind(null, dir, relativePath, structure[relativePath]));
+  }
+  queue.await(callback);
 }
 
 module.exports = function (dir, structure, callback) {
