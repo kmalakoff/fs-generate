@@ -35,22 +35,22 @@ function file(fullPath, contents, callback) {
   });
 }
 
-function symlink(target, fullPath, callback) {
-  fsCompat.lstatReal(target, STAT_OPTIONS, function (err, targetStat) {
-    if (err || !targetStat) return callback(err || new Error('Symlink path does not exist' + target));
+function symlink(targetFullPath, fullPath, callback) {
+  fsCompat.lstatReal(targetFullPath, STAT_OPTIONS, function (err, targetStat) {
+    if (err || !targetStat) return callback(err || new Error('Symlink path does not exist' + targetFullPath));
+    var targetRelativePath = path.relative(path.dirname(fullPath), targetFullPath);
     var type = targetStat.isDirectory() ? 'dir' : 'file';
-
     fsCompat.lstat(fullPath, STAT_OPTIONS, function (err, stat) {
-      if (err || !stat) fs.symlink(target, fullPath, type, callback);
+      if (err || !stat) fs.symlink(targetRelativePath, fullPath, type, callback);
       else if (!stat.isSymbolicLink()) {
         rimraf(fullPath, function (err) {
-          err ? callback(err) : fs.symlink(target, fullPath, type, callback);
+          err ? callback(err) : fs.symlink(targetRelativePath, fullPath, type, callback);
         });
       } else {
         fsCompat.realpath(fullPath, function (err, realpath) {
-          if (err || realpath !== target)
+          if (err || realpath !== targetFullPath)
             rimraf(fullPath, function (err) {
-              err ? callback(err) : fs.symlink(target, fullPath, type, callback);
+              err ? callback(err) : fs.symlink(targetRelativePath, fullPath, type, callback);
             });
           else callback();
         });
@@ -59,21 +59,21 @@ function symlink(target, fullPath, callback) {
   });
 }
 
-function link(target, fullPath, callback) {
-  fsCompat.lstatReal(target, STAT_OPTIONS, function (err, targetStat) {
-    if (err || !targetStat) return callback(err || new Error('Symlink path does not exist' + target));
+function link(targetFullPath, fullPath, callback) {
+  fsCompat.lstatReal(targetFullPath, STAT_OPTIONS, function (err, targetStat) {
+    if (err || !targetStat) return callback(err || new Error('Symlink path does not exist' + targetFullPath));
 
     fsCompat.lstat(fullPath, STAT_OPTIONS, function (err, stat) {
-      if (err || !stat) fs.link(target, fullPath, callback);
+      if (err || !stat) fs.link(targetFullPath, fullPath, callback);
       else if (!stat.isFile()) {
         rimraf(fullPath, function (err) {
-          err ? callback(err) : fs.link(target, fullPath, callback);
+          err ? callback(err) : fs.link(targetFullPath, fullPath, callback);
         });
       } else {
         fsCompat.realpath(fullPath, function (err, realpath) {
-          if (err || realpath !== target)
+          if (err || realpath !== targetFullPath)
             rimraf(fullPath, function (err) {
-              err ? callback(err) : fs.link(target, fullPath, callback);
+              err ? callback(err) : fs.link(targetFullPath, fullPath, callback);
             });
           else callback();
         });
