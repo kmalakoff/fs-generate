@@ -16,9 +16,11 @@ var STRUCTURE = {
   'dir2/file2': 'd',
   'dir3/dir4/file1': 'e',
   'dir3/dir4/dir5': null,
-  filelink1: '~dir3/dir4/file1',
-  'dir3/filelink2': '~dir2/file1',
-  'dir3/dir4/dirlink1': '~dir2',
+  filesymlink1: '~dir3/dir4/file1',
+  filelink1: ':dir3/dir4/file1',
+  'dir3/filesymlink2': '~dir2/file1',
+  'dir3/filelink2': ':dir2/file1',
+  'dir3/dir4/dirsymlink1': '~dir2',
 };
 
 describe('promise', function () {
@@ -37,7 +39,7 @@ describe('promise', function () {
         })
         .then(function () {
           assert.equal(spys.dir.callCount, 5);
-          assert.equal(spys.file.callCount, 7);
+          assert.equal(spys.file.callCount, 9);
           assert.equal(spys.link.callCount, 3);
         })
         .catch(function (err) {
@@ -57,7 +59,7 @@ describe('promise', function () {
           })
           .then(function () {
             assert.equal(spys.dir.callCount, 5);
-            assert.equal(spys.file.callCount, 7);
+            assert.equal(spys.file.callCount, 9);
             assert.equal(spys.link.callCount, 3);
           })
           .catch(function (err) {

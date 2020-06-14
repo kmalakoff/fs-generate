@@ -25,9 +25,11 @@ describe('replace', function () {
         'dir2/file2': 'dd',
         'dir3/dir4/file1': 'e',
         'dir3/dir4/dir5': null,
-        filelink1: 'file',
-        'dir3/filelink2': '~dir2/file1',
-        'dir3/dir4/dirlink1': null,
+        filesymlink1: 'file',
+        filelink1: ':dir3/dir4/file1',
+        'dir3/filesymlink2': '~dir2/file1',
+        'dir3/filelink2': ':dir2/file2',
+        'dir3/dir4/dirsymlink1': null,
       };
 
       generate(TEST_DIR, MISMATCHED_STRUCTURE, function (err) {
@@ -41,7 +43,7 @@ describe('replace', function () {
           function (err) {
             assert.ok(!err);
             assert.equal(spys.dir.callCount, 7);
-            assert.equal(spys.file.callCount, 4);
+            assert.equal(spys.file.callCount, 6);
             assert.equal(spys.link.callCount, 2);
             done();
           }
@@ -60,9 +62,11 @@ describe('replace', function () {
         'dir2/file2': 'd',
         'dir3/dir4/file1': 'e',
         'dir3/dir4/dir5': null,
-        filelink1: '~dir3/dir4/file1',
-        'dir3/filelink2': '~dir2/file1',
-        'dir3/dir4/dirlink1': '~dir2',
+        filesymlink1: '~dir3/dir4/file1',
+        filelink1: ':dir3/dir4/file1',
+        'dir3/filesymlink2': '~dir2/file1',
+        'dir3/filelink2': ':dir2/file1',
+        'dir3/dir4/dirsymlink1': '~dir2',
       };
 
       generate(TEST_DIR, STRUCTURE, function (err) {
@@ -76,7 +80,7 @@ describe('replace', function () {
           function (err) {
             assert.ok(!err);
             assert.equal(spys.dir.callCount, 5);
-            assert.equal(spys.file.callCount, 7);
+            assert.equal(spys.file.callCount, 9);
             assert.equal(spys.link.callCount, 3);
             done();
           }
