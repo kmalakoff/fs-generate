@@ -33,7 +33,7 @@
     "graceful-fs": "^4.2.10",
     "mkpath": "^1.0.0",
     "queue-cb": "^1.1.7",
-    "rimraf": "^2.7.1"
+    "rimraf": "^3.0.2"
   },
   "devDependencies": {
     "@typescript-eslint/parser": "^5.30.7",
