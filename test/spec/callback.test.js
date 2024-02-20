@@ -1,15 +1,15 @@
-var assert = require('assert');
+const assert = require('assert');
 
-var path = require('path');
-var rimraf = require('rimraf');
-var Iterator = require('fs-iterator');
-var Queue = require('queue-cb');
-var statsSpys = require('fs-stats-spys');
+const path = require('path');
+const rimraf = require('rimraf');
+const Iterator = require('fs-iterator');
+const Queue = require('queue-cb');
+const statsSpys = require('fs-stats-spys');
 
-var generate = require('../..');
+const generate = require('fs-generate');
 
-var TEST_DIR = path.join(__dirname, '..', '..', '.tmp');
-var STRUCTURE = {
+const TEST_DIR = path.join(__dirname, '..', '..', '.tmp');
+const STRUCTURE = {
   file1: 'a',
   file2: 'b',
   dir1: null,
@@ -24,21 +24,21 @@ var STRUCTURE = {
   'dir3/dir4/dirsymlink1': '~dir2',
 };
 
-describe('callback', function () {
+describe('callback', () => {
   beforeEach(rimraf.bind(null, TEST_DIR));
 
-  it('should create the expected structure (clean)', function (done) {
-    var spys = statsSpys();
+  it('should create the expected structure (clean)', (done) => {
+    const spys = statsSpys();
 
-    generate(TEST_DIR, STRUCTURE, function (err) {
+    generate(TEST_DIR, STRUCTURE, (err) => {
       assert.ok(!err);
 
-      var iterator = new Iterator(TEST_DIR, { lstat: true });
+      const iterator = new Iterator(TEST_DIR, { lstat: true });
       iterator.forEach(
-        function (entry) {
+        (entry) => {
           spys(entry.stats);
         },
-        function (err) {
+        (err) => {
           assert.ok(!err);
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 9);
@@ -49,19 +49,19 @@ describe('callback', function () {
     });
   });
 
-  it('should create the expected structure (twice)', function (done) {
+  it('should create the expected structure (twice)', (done) => {
     function gen(done) {
-      var spys = statsSpys();
+      const spys = statsSpys();
 
-      generate(TEST_DIR, STRUCTURE, function (err) {
+      generate(TEST_DIR, STRUCTURE, (err) => {
         assert.ok(!err);
 
-        var iterator = new Iterator(TEST_DIR, { lstat: true });
+        const iterator = new Iterator(TEST_DIR, { lstat: true });
         iterator.forEach(
-          function (entry) {
+          (entry) => {
             spys(entry.stats);
           },
-          function (err) {
+          (err) => {
             assert.ok(!err);
             assert.equal(spys.dir.callCount, 5);
             assert.equal(spys.file.callCount, 9);
@@ -72,7 +72,7 @@ describe('callback', function () {
       });
     }
 
-    var queue = new Queue(1);
+    const queue = new Queue(1);
     queue.defer(gen);
     queue.defer(gen);
     queue.await(done);
