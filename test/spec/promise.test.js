@@ -1,14 +1,14 @@
-var assert = require('assert');
+const assert = require('assert');
 
-var path = require('path');
-var rimraf = require('rimraf');
-var Iterator = require('fs-iterator');
-var statsSpys = require('fs-stats-spys');
+const path = require('path');
+const rimraf = require('rimraf');
+const Iterator = require('fs-iterator');
+const statsSpys = require('fs-stats-spys');
 
-var generate = require('../..');
+const generate = require('fs-generate');
 
-var TEST_DIR = path.join(__dirname, '..', '..', '.tmp');
-var STRUCTURE = {
+const TEST_DIR = path.join(__dirname, '..', '..', '.tmp');
+const STRUCTURE = {
   file1: 'a',
   file2: 'b',
   dir1: null,
@@ -23,46 +23,46 @@ var STRUCTURE = {
   'dir3/dir4/dirsymlink1': '~dir2',
 };
 
-describe('promise', function () {
+describe('promise', () => {
   if (typeof Promise === 'undefined') return; // no promise support
 
   beforeEach(rimraf.bind(null, TEST_DIR));
 
-  it('should create the expected structure (clean)', function () {
-    var spys = statsSpys();
+  it('should create the expected structure (clean)', () => {
+    const spys = statsSpys();
 
-    return generate(TEST_DIR, STRUCTURE).then(function () {
-      var iterator = new Iterator(TEST_DIR, { lstat: true });
+    return generate(TEST_DIR, STRUCTURE).then(() => {
+      const iterator = new Iterator(TEST_DIR, { lstat: true });
       return iterator
-        .forEach(function (entry) {
+        .forEach((entry) => {
           spys(entry.stats);
         })
-        .then(function () {
+        .then(() => {
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 9);
           assert.equal(spys.link.callCount, 3);
         })
-        .catch(function (err) {
+        .catch((err) => {
           assert.ok(!err);
         });
     });
   });
 
-  it('should create the expected structure (twice)', function () {
+  it('should create the expected structure (twice)', () => {
     function gen() {
-      var spys = statsSpys();
-      return generate(TEST_DIR, STRUCTURE).then(function () {
-        var iterator = new Iterator(TEST_DIR, { lstat: true });
+      const spys = statsSpys();
+      return generate(TEST_DIR, STRUCTURE).then(() => {
+        const iterator = new Iterator(TEST_DIR, { lstat: true });
         return iterator
-          .forEach(function (entry) {
+          .forEach((entry) => {
             spys(entry.stats);
           })
-          .then(function () {
+          .then(() => {
             assert.equal(spys.dir.callCount, 5);
             assert.equal(spys.file.callCount, 9);
             assert.equal(spys.link.callCount, 3);
           })
-          .catch(function (err) {
+          .catch((err) => {
             assert.ok(!err);
           });
       });

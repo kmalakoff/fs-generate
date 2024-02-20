@@ -1,0 +1,1 @@
+{"version":3,"sources":["index.mjs"],"sourcesContent":["import generate from './generate.cjs';\nexport default generate;\n"],"names":["generate"],"mappings":";;;;+BACA;;;eAAA;;;kEADqB;;;;;;IACrB,WAAeA,oBAAQ"}
