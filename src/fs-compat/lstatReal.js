@@ -1,5 +1,5 @@
-var lstat = require('./lstat');
-var realpath = require('./realpath');
+const lstat = require('./lstat');
+const realpath = require('./realpath');
 
 module.exports = function lstatReal(path, options, callback) {
   realpath(path, function realpathCallback(err, realpath) {
