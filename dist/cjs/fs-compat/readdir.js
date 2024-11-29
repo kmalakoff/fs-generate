@@ -1,8 +1,8 @@
 "use strict";
-var fs = require("fs");
+var fs = require('fs');
 // prior to Node 9, fs.readdir did not return sorted files
 var readdir = fs.readdir;
-if (+process.versions.node.split(".")[1] <= 8) {
+if (+process.versions.node.split('.')[1] <= 8) {
     readdir = function readdirSort(path, callback) {
         fs.readdir(path, function(err, files) {
             err ? callback(err) : callback(null, files.sort());

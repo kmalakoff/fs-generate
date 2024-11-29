@@ -1,5 +1,5 @@
 "use strict";
-var fs = require("fs");
+var fs = require('fs');
 function lstatAddOptions(path, _options, callback) {
     return fs.lstat(path, callback);
 }

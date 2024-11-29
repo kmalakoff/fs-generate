@@ -1,6 +1,6 @@
 "use strict";
-var lstat = require("./lstat");
-var realpath = require("./realpath");
+var lstat = require('./lstat');
+var realpath = require('./realpath');
 module.exports = function lstatReal(path, options, callback) {
     realpath(path, function realpathCallback(err, realpath) {
         if (err) return callback(err);

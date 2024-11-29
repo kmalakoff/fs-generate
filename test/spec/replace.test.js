@@ -1,7 +1,7 @@
 const assert = require('assert');
 
 const path = require('path');
-const rimraf = require('rimraf');
+const rimraf2 = require('rimraf2');
 const Iterator = require('fs-iterator');
 const Queue = require('queue-cb');
 const statsSpys = require('fs-stats-spys');
@@ -11,7 +11,7 @@ const generate = require('fs-generate');
 const TEST_DIR = path.join(__dirname, '..', '..', '.tmp');
 
 describe('replace', () => {
-  beforeEach(rimraf.bind(null, TEST_DIR));
+  beforeEach((cb) => rimraf2(TEST_DIR, { disableGlob: true }, () => cb()));
 
   it('should create the expected structure (updating mis-matched)', (done) => {
     function genMismatched(done) {

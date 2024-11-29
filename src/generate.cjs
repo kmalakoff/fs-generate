@@ -1,6 +1,6 @@
 const path = require('path');
 const fs = require('graceful-fs');
-const rimraf = require('rimraf');
+const rimraf2 = require('rimraf2');
 const mkpath = require('mkpath');
 const Queue = require('queue-cb');
 
@@ -11,7 +11,7 @@ function directory(fullPath, callback) {
   fsCompat.lstat(fullPath, STAT_OPTIONS, (err, stat) => {
     if (err || !stat) mkpath(fullPath, callback);
     else if (!stat.isDirectory()) {
-      rimraf(fullPath, (err) => {
+      rimraf2(fullPath, { disableGlob: true }, (err) => {
         err ? callback(err) : mkpath(fullPath, callback);
       });
     } else callback();
@@ -22,7 +22,7 @@ function file(fullPath, contents, callback) {
   fsCompat.lstat(fullPath, STAT_OPTIONS, (err, stat) => {
     if (err || !stat) fs.writeFile(fullPath, contents, 'utf8', callback);
     else if (!stat.isFile()) {
-      rimraf(fullPath, (err) => {
+      rimraf2(fullPath, { disableGlob: true }, (err) => {
         err ? callback(err) : fs.writeFile(fullPath, contents, 'utf8', callback);
       });
     } else {
@@ -43,13 +43,13 @@ function symlink(targetFullPath, fullPath, callback) {
     fsCompat.lstat(fullPath, STAT_OPTIONS, (err, stat) => {
       if (err || !stat) fs.symlink(targetRelativePath, fullPath, type, callback);
       else if (!stat.isSymbolicLink()) {
-        rimraf(fullPath, (err) => {
+        rimraf2(fullPath, { disableGlob: true }, (err) => {
           err ? callback(err) : fs.symlink(targetRelativePath, fullPath, type, callback);
         });
       } else {
         fsCompat.realpath(fullPath, (err, realpath) => {
           if (err || realpath !== targetFullPath)
-            rimraf(fullPath, (err) => {
+            rimraf2(fullPath, { disableGlob: true }, (err) => {
               err ? callback(err) : fs.symlink(targetRelativePath, fullPath, type, callback);
             });
           else callback();
@@ -66,13 +66,13 @@ function link(targetFullPath, fullPath, callback) {
     fsCompat.lstat(fullPath, STAT_OPTIONS, (err, stat) => {
       if (err || !stat) fs.link(targetFullPath, fullPath, callback);
       else if (!stat.isFile()) {
-        rimraf(fullPath, (err) => {
+        rimraf2(fullPath, { disableGlob: true }, (err) => {
           err ? callback(err) : fs.link(targetFullPath, fullPath, callback);
         });
       } else {
         fsCompat.realpath(fullPath, (err, realpath) => {
           if (err || realpath !== targetFullPath)
-            rimraf(fullPath, (err) => {
+            rimraf2(fullPath, { disableGlob: true }, (err) => {
               err ? callback(err) : fs.link(targetFullPath, fullPath, callback);
             });
           else callback();
