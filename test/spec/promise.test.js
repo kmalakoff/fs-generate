@@ -1,7 +1,7 @@
 const assert = require('assert');
 
 const path = require('path');
-const rimraf = require('rimraf');
+const rimraf2 = require('rimraf2');
 const Iterator = require('fs-iterator');
 const statsSpys = require('fs-stats-spys');
 
@@ -26,7 +26,7 @@ const STRUCTURE = {
 describe('promise', () => {
   if (typeof Promise === 'undefined') return; // no promise support
 
-  beforeEach(rimraf.bind(null, TEST_DIR));
+  beforeEach((cb) => rimraf2(TEST_DIR, { disableGlob: true }, () => cb()));
 
   it('should create the expected structure (clean)', () => {
     const spys = statsSpys();
