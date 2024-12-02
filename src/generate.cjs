@@ -5,7 +5,7 @@ const mkpath = require('mkpath');
 const Queue = require('queue-cb');
 
 const fsCompat = require('./fs-compat');
-const STAT_OPTIONS = { bigint: process.platform === 'win32' };
+const STAT_OPTIONS = { bigint: process.platform === 'win32' || /^(msys|cygwin)$/.test(process.env.OSTYPE) };
 
 function directory(fullPath, callback) {
   fsCompat.lstat(fullPath, STAT_OPTIONS, (err, stat) => {
