@@ -35,16 +35,16 @@
     "graceful-fs": "^4.2.11",
     "mkpath": "^1.0.0",
     "queue-cb": "^1.2.1",
-    "rimraf2": "^2.7.1"
+    "rimraf2": "^2.8.2"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
     "@types/mocha": "^10.0.10",
     "@types/node": "^22.10.1",
     "depcheck": "^1.4.7",
-    "fs-iterator": "^5.1.0",
+    "fs-iterator": "^5.1.1",
     "fs-stats-spys": "^1.0.2",
-    "ts-dev-stack": "^0.16.2"
+    "ts-dev-stack": "^1.0.3"
   },
   "engines": {
     "node": ">=0.8"
