@@ -43,7 +43,7 @@ describe('promise', () => {
           assert.equal(spys.link.callCount, 3);
         })
         .catch((err) => {
-          assert.ok(!err);
+          assert.ok(!err, err ? err.message : '');
         });
     });
   });
@@ -63,7 +63,7 @@ describe('promise', () => {
             assert.equal(spys.link.callCount, 3);
           })
           .catch((err) => {
-            assert.ok(!err);
+            assert.ok(!err, err ? err.message : '');
           });
       });
     }
