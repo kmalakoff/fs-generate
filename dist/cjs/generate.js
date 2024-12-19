@@ -6,7 +6,7 @@ var mkpath = require('mkpath');
 var Queue = require('queue-cb');
 var fsCompat = require('./fs-compat');
 var STAT_OPTIONS = {
-    bigint: process.platform === 'win32'
+    bigint: process.platform === 'win32' || /^(msys|cygwin)$/.test(process.env.OSTYPE)
 };
 function directory(fullPath, callback) {
     fsCompat.lstat(fullPath, STAT_OPTIONS, function(err, stat) {
@@ -113,4 +113,4 @@ module.exports = function(dir, structure, callback) {
         });
     });
 };
-/* CJS INTEROP */ if (exports.__esModule && exports.default) { Object.defineProperty(exports.default, '__esModule', { value: true }); for (var key in exports) exports.default[key] = exports[key]; module.exports = exports.default; }
+/* CJS INTEROP */ if (exports.__esModule && exports.default) { try { Object.defineProperty(exports.default, '__esModule', { value: true }); for (var key in exports) { exports.default[key] = exports[key]; } } catch (_) {}; module.exports = exports.default; }
