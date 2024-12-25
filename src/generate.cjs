@@ -1,18 +1,20 @@
+// biome-ignore lint/suspicious/noShadowRestrictedNames: <explanation>
+const Promise = require('pinkie-promise');
 const path = require('path');
 const fs = require('graceful-fs');
 const rimraf2 = require('rimraf2');
-const mkpath = require('mkpath');
+const mkdirp = require('mkdirp-classic');
 const Queue = require('queue-cb');
 
 const fsCompat = require('./fs-compat');
-const STAT_OPTIONS = { bigint: process.platform === 'win32' };
+const STAT_OPTIONS = { bigint: process.platform === 'win32' || /^(msys|cygwin)$/.test(process.env.OSTYPE) };
 
 function directory(fullPath, callback) {
   fsCompat.lstat(fullPath, STAT_OPTIONS, (err, stat) => {
-    if (err || !stat) mkpath(fullPath, callback);
+    if (err || !stat) mkdirp(fullPath, callback);
     else if (!stat.isDirectory()) {
       rimraf2(fullPath, { disableGlob: true }, (err) => {
-        err ? callback(err) : mkpath(fullPath, callback);
+        err ? callback(err) : mkdirp(fullPath, callback);
       });
     } else callback();
   });
@@ -85,7 +87,7 @@ function link(targetFullPath, fullPath, callback) {
 function generateOne(dir, relativePath, contents, callback) {
   const fullPath = path.join(dir, relativePath.split('/').join(path.sep));
   if (!contents) return directory(fullPath, callback);
-  mkpath(path.dirname(fullPath), (err) => {
+  mkdirp(path.dirname(fullPath), (err) => {
     if (err) return callback(err);
 
     if (contents.length && contents[0] === '~') symlink(path.join(dir, contents.slice(1).split('/').join(path.sep)), fullPath, callback);
