@@ -1,3 +1,5 @@
+// biome-ignore lint/suspicious/noShadowRestrictedNames: <explanation>
+const Promise = require('pinkie-promise');
 const assert = require('assert');
 
 const path = require('path');
@@ -24,8 +26,6 @@ const STRUCTURE = {
 };
 
 describe('promise', () => {
-  if (typeof Promise === 'undefined') return; // no promise support
-
   beforeEach((cb) => rimraf2(TEST_DIR, { disableGlob: true }, () => cb()));
 
   it('should create the expected structure (clean)', () => {
@@ -43,7 +43,7 @@ describe('promise', () => {
           assert.equal(spys.link.callCount, 3);
         })
         .catch((err) => {
-          assert.ok(!err);
+          assert.ok(!err, err ? err.message : '');
         });
     });
   });
@@ -63,7 +63,7 @@ describe('promise', () => {
             assert.equal(spys.link.callCount, 3);
           })
           .catch((err) => {
-            assert.ok(!err);
+            assert.ok(!err, err ? err.message : '');
           });
       });
     }

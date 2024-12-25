@@ -1,1 +1,1 @@
-ignores: ["fs-generate", "depcheck", "ts-dev-stack", "@types/*"]
+ignores: ["fs-generate", "depcheck", "ts-dev-stack", "@types/*", "@biomejs/*"]
