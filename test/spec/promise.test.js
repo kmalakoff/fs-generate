@@ -26,48 +26,46 @@ const STRUCTURE = {
 };
 
 describe('promise', () => {
+  (() => {
+    // patch and restore promise
+    const root = typeof global !== 'undefined' ? global : window;
+    let rootPromise;
+    before(() => {
+      rootPromise = root.Promise;
+      root.Promise = Promise;
+    });
+    after(() => {
+      root.Promise = rootPromise;
+    });
+  })();
   beforeEach((cb) => rimraf2(TEST_DIR, { disableGlob: true }, () => cb()));
 
-  it('should create the expected structure (clean)', () => {
+  it('should create the expected structure (clean)', async () => {
     const spys = statsSpys();
 
-    return generate(TEST_DIR, STRUCTURE).then(() => {
-      const iterator = new Iterator(TEST_DIR, { lstat: true });
-      return iterator
-        .forEach((entry) => {
-          spys(entry.stats);
-        })
-        .then(() => {
-          assert.equal(spys.dir.callCount, 5);
-          assert.equal(spys.file.callCount, 9);
-          assert.equal(spys.link.callCount, 3);
-        })
-        .catch((err) => {
-          assert.ok(!err, err ? err.message : '');
-        });
+    await generate(TEST_DIR, STRUCTURE);
+    const iterator = new Iterator(TEST_DIR, { lstat: true });
+    await iterator.forEach((entry) => {
+      spys(entry.stats);
     });
+    assert.equal(spys.dir.callCount, 5);
+    assert.equal(spys.file.callCount, 9);
+    assert.equal(spys.link.callCount, 3);
   });
 
-  it('should create the expected structure (twice)', () => {
-    function gen() {
+  it('should create the expected structure (twice)', async () => {
+    async function gen() {
       const spys = statsSpys();
-      return generate(TEST_DIR, STRUCTURE).then(() => {
-        const iterator = new Iterator(TEST_DIR, { lstat: true });
-        return iterator
-          .forEach((entry) => {
-            spys(entry.stats);
-          })
-          .then(() => {
-            assert.equal(spys.dir.callCount, 5);
-            assert.equal(spys.file.callCount, 9);
-            assert.equal(spys.link.callCount, 3);
-          })
-          .catch((err) => {
-            assert.ok(!err, err ? err.message : '');
-          });
+      await generate(TEST_DIR, STRUCTURE);
+      const iterator = new Iterator(TEST_DIR, { lstat: true });
+      await iterator.forEach((entry) => {
+        spys(entry.stats);
       });
+      assert.equal(spys.dir.callCount, 5);
+      assert.equal(spys.file.callCount, 9);
+      assert.equal(spys.link.callCount, 3);
     }
 
-    return Promise.all([gen, gen]);
+    await Promise.all([gen, gen]);
   });
 });
