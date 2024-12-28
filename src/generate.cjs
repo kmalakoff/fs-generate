@@ -1,5 +1,3 @@
-// biome-ignore lint/suspicious/noShadowRestrictedNames: <explanation>
-const Promise = require('pinkie-promise');
 const path = require('path');
 const fs = require('graceful-fs');
 const rimraf2 = require('rimraf2');
