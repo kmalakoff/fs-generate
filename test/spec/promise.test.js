@@ -1,5 +1,4 @@
-// biome-ignore lint/suspicious/noShadowRestrictedNames: <explanation>
-const Promise = require('pinkie-promise');
+const Pinkie = require('pinkie-promise');
 const assert = require('assert');
 
 const path = require('path');
@@ -32,7 +31,8 @@ describe('promise', () => {
     let rootPromise;
     before(() => {
       rootPromise = root.Promise;
-      root.Promise = Promise;
+      // @ts-ignore
+      root.Promise = Pinkie;
     });
     after(() => {
       root.Promise = rootPromise;
