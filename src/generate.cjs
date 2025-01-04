@@ -4,7 +4,7 @@ const rimraf2 = require('rimraf2');
 const mkdirp = require('mkdirp-classic');
 const Queue = require('queue-cb');
 
-const fsCompat = require('./fs-compat');
+const fsCompat = require('./fs-compat/index');
 const STAT_OPTIONS = { bigint: process.platform === 'win32' || /^(msys|cygwin)$/.test(process.env.OSTYPE) };
 
 function directory(fullPath, callback) {
@@ -94,7 +94,7 @@ function generateOne(dir, relativePath, contents, callback) {
   });
 }
 
-function generate(dir, structure, callback) {
+function worker(dir, structure, callback) {
   const queue = new Queue(1);
   for (const relativePath in structure) {
     queue.defer(generateOne.bind(null, dir, relativePath, structure[relativePath]));
@@ -102,11 +102,7 @@ function generate(dir, structure, callback) {
   queue.await(callback);
 }
 
-module.exports = function (dir, structure, callback) {
-  if (callback !== undefined) return generate(dir, structure, callback);
-  return new Promise((resolve, reject) => {
-    generate(dir, structure, (err) => {
-      err ? reject(err) : resolve();
-    });
-  });
+module.exports = (dir, structure, callback) => {
+  if (callback !== undefined) return worker(dir, structure, callback);
+  return new Promise((resolve, reject) => worker(dir, structure, (err) => (err ? reject(err) : resolve())));
 };
