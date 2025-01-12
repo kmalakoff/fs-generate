@@ -24,8 +24,6 @@
   ],
   "scripts": {
     "build": "tsds build",
-    "deploy": "tsds deploy",
-    "docs": "tsds docs",
     "format": "biome check --write --unsafe src/ test/",
     "test": "tsds test:node --no-timeouts",
     "test:engines": "nvu engines npm test",
@@ -36,15 +34,15 @@
     "graceful-fs": "^4.2.11",
     "mkdirp-classic": "^0.5.3",
     "pinkie-promise": "^2.0.1",
-    "queue-cb": "^1.4.9",
+    "queue-cb": "^1.4.11",
     "rimraf2": "^2.8.2"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
     "@types/mocha": "^10.0.10",
     "@types/node": "^22.10.5",
-    "fs-iterator": "^5.2.1",
-    "fs-stats-spys": "^1.1.0"
+    "fs-iterator": "^5.2.10",
+    "fs-stats-spys": "^1.1.7"
   },
   "engines": {
     "node": ">=0.8"
