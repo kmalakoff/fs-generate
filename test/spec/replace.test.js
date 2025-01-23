@@ -33,7 +33,7 @@ describe('replace', () => {
       };
 
       generate(TEST_DIR, MISMATCHED_STRUCTURE, (err) => {
-        assert.ok(!err, err ? err.message : '');
+        if (err) return done(err.message);
 
         const iterator = new Iterator(TEST_DIR, { lstat: true });
         iterator.forEach(
@@ -41,7 +41,7 @@ describe('replace', () => {
             spys(entry.stats);
           },
           (err) => {
-            assert.ok(!err, err ? err.message : '');
+            if (err) return done(err.message);
             assert.equal(spys.dir.callCount, 7);
             assert.equal(spys.file.callCount, 6);
             assert.equal(spys.link.callCount, 2);
@@ -70,7 +70,7 @@ describe('replace', () => {
       };
 
       generate(TEST_DIR, STRUCTURE, (err) => {
-        assert.ok(!err, err ? err.message : '');
+        if (err) return done(err.message);
 
         const iterator = new Iterator(TEST_DIR, { lstat: true });
         iterator.forEach(
@@ -78,7 +78,7 @@ describe('replace', () => {
             spys(entry.stats);
           },
           (err) => {
-            assert.ok(!err, err ? err.message : '');
+            if (err) return done(err.message);
             assert.equal(spys.dir.callCount, 5);
             assert.equal(spys.file.callCount, 9);
             assert.equal(spys.link.callCount, 3);
