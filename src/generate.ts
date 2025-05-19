@@ -1,10 +1,10 @@
-const path = require('path');
-const fs = require('graceful-fs');
-const rimraf2 = require('rimraf2');
-const mkdirp = require('mkdirp-classic');
-const Queue = require('queue-cb');
+import path from 'path';
+import fs from 'graceful-fs';
+import mkdirp from 'mkdirp-classic';
+import Queue from 'queue-cb';
+import rimraf2 from 'rimraf2';
 
-const fsCompat = require('./fs-compat/index');
+import fsCompat from './fs-compat/index.js';
 const STAT_OPTIONS = { bigint: process.platform === 'win32' || /^(msys|cygwin)$/.test(process.env.OSTYPE) };
 
 function directory(fullPath, callback) {
@@ -102,7 +102,7 @@ function worker(dir, structure, callback) {
   queue.await(callback);
 }
 
-module.exports = (dir, structure, callback) => {
+export default (dir, structure, callback) => {
   if (callback !== undefined) return worker(dir, structure, callback);
-  return new Promise((resolve, reject) => worker(dir, structure, (err) => (err ? reject(err) : resolve())));
+  return new Promise((resolve, reject) => worker(dir, structure, (err) => (err ? reject(err) : resolve(undefined))));
 };
