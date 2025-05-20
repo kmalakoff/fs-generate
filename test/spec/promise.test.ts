@@ -1,13 +1,17 @@
-const Pinkie = require('pinkie-promise');
-const assert = require('assert');
+import assert from 'assert';
+import Pinkie from 'pinkie-promise';
 
-const path = require('path');
-const rimraf2 = require('rimraf2');
-const Iterator = require('fs-iterator');
-const statsSpys = require('fs-stats-spys');
+import type { Stats } from 'fs';
+import path from 'path';
+import url from 'url';
+import Iterator, { type Entry } from 'fs-iterator';
+import statsSpys from 'fs-stats-spys';
+import rimraf2 from 'rimraf2';
 
-const generate = require('fs-generate');
+// @ts-ignore
+import generate from 'fs-generate';
 
+const __dirname = path.dirname(typeof __filename !== 'undefined' ? __filename : url.fileURLToPath(import.meta.url));
 const TEST_DIR = path.join(__dirname, '..', '..', '.tmp');
 const STRUCTURE = {
   file1: 'a',
@@ -27,15 +31,14 @@ const STRUCTURE = {
 describe('promise', () => {
   (() => {
     // patch and restore promise
-    const root = typeof global !== 'undefined' ? global : window;
-    let rootPromise;
+    // @ts-ignore
+    let rootPromise: Promise;
     before(() => {
-      rootPromise = root.Promise;
-      // @ts-ignore
-      root.Promise = Pinkie;
+      rootPromise = global.Promise;
+      global.Promise = Pinkie;
     });
     after(() => {
-      root.Promise = rootPromise;
+      global.Promise = rootPromise;
     });
   })();
   beforeEach((cb) => rimraf2(TEST_DIR, { disableGlob: true }, () => cb()));
@@ -45,8 +48,8 @@ describe('promise', () => {
 
     await generate(TEST_DIR, STRUCTURE);
     const iterator = new Iterator(TEST_DIR, { lstat: true });
-    await iterator.forEach((entry) => {
-      spys(entry.stats);
+    await iterator.forEach((entry: Entry): undefined => {
+      spys(entry.stats as Stats);
     });
     assert.equal(spys.dir.callCount, 5);
     assert.equal(spys.file.callCount, 9);
@@ -58,8 +61,8 @@ describe('promise', () => {
       const spys = statsSpys();
       await generate(TEST_DIR, STRUCTURE);
       const iterator = new Iterator(TEST_DIR, { lstat: true });
-      await iterator.forEach((entry) => {
-        spys(entry.stats);
+      await iterator.forEach((entry: Entry): undefined => {
+        spys(entry.stats as Stats);
       });
       assert.equal(spys.dir.callCount, 5);
       assert.equal(spys.file.callCount, 9);
