@@ -1,13 +1,17 @@
-const assert = require('assert');
+import assert from 'assert';
 
-const path = require('path');
-const rimraf2 = require('rimraf2');
-const Iterator = require('fs-iterator');
-const Queue = require('queue-cb');
-const statsSpys = require('fs-stats-spys');
+import type { Stats } from 'fs';
+import path from 'path';
+import url from 'url';
+import Iterator, { type Entry } from 'fs-iterator';
+import statsSpys from 'fs-stats-spys';
+import Queue from 'queue-cb';
+import rimraf2 from 'rimraf2';
 
-const generate = require('fs-generate');
+// @ts-ignore
+import generate from 'fs-generate';
 
+const __dirname = path.dirname(typeof __filename !== 'undefined' ? __filename : url.fileURLToPath(import.meta.url));
 const TEST_DIR = path.join(__dirname, '..', '..', '.tmp');
 
 describe('replace', () => {
@@ -37,8 +41,8 @@ describe('replace', () => {
 
         const iterator = new Iterator(TEST_DIR, { lstat: true });
         iterator.forEach(
-          (entry) => {
-            spys(entry.stats);
+          (entry: Entry): undefined => {
+            spys(entry.stats as Stats);
           },
           (err) => {
             if (err) return done(err.message);
@@ -74,8 +78,8 @@ describe('replace', () => {
 
         const iterator = new Iterator(TEST_DIR, { lstat: true });
         iterator.forEach(
-          (entry) => {
-            spys(entry.stats);
+          (entry: Entry): undefined => {
+            spys(entry.stats as Stats);
           },
           (err) => {
             if (err) return done(err.message);
