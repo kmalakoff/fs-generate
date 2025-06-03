@@ -15,4 +15,4 @@ function readdirAddOptions(path, _options, callback) {
   return readdir(path, callback);
 }
 
-export default fs.readdir.length === 3 ? fs.readdir : readdirAddOptions;
+export default (fs.readdir.length === 3 ? fs.readdir : readdirAddOptions) as typeof fs.readdir;
