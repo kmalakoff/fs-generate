@@ -7,7 +7,9 @@ import rimraf2 from 'rimraf2';
 import fsCompat from './fs-compat/index.js';
 const STAT_OPTIONS = { bigint: process.platform === 'win32' || /^(msys|cygwin)$/.test(process.env.OSTYPE) };
 
-function directory(fullPath, callback) {
+import type { Callback, Structure } from './types.js';
+
+function directory(fullPath: string, callback: Callback) {
   fsCompat.lstat(fullPath, STAT_OPTIONS, (err, stat) => {
     if (err || !stat) mkdirp(fullPath, callback);
     else if (!stat.isDirectory()) {
@@ -18,7 +20,7 @@ function directory(fullPath, callback) {
   });
 }
 
-function file(fullPath, contents, callback) {
+function file(fullPath: string, contents: string, callback: Callback) {
   fsCompat.lstat(fullPath, STAT_OPTIONS, (err, stat) => {
     if (err || !stat) fs.writeFile(fullPath, contents, 'utf8', callback);
     else if (!stat.isFile()) {
@@ -35,7 +37,7 @@ function file(fullPath, contents, callback) {
   });
 }
 
-function symlink(targetFullPath, fullPath, callback) {
+function symlink(targetFullPath: string, fullPath: string, callback: Callback) {
   fsCompat.lstatReal(targetFullPath, STAT_OPTIONS, (err, targetStat) => {
     if (err || !targetStat) return callback(err || new Error(`Symlink path does not exist${targetFullPath}`));
     const targetRelativePath = path.relative(path.dirname(fullPath), targetFullPath);
@@ -59,7 +61,7 @@ function symlink(targetFullPath, fullPath, callback) {
   });
 }
 
-function link(targetFullPath, fullPath, callback) {
+function link(targetFullPath: string, fullPath: string, callback: Callback) {
   fsCompat.lstatReal(targetFullPath, STAT_OPTIONS, (err, targetStat) => {
     if (err || !targetStat) return callback(err || new Error(`Symlink path does not exist${targetFullPath}`));
 
@@ -82,7 +84,7 @@ function link(targetFullPath, fullPath, callback) {
   });
 }
 
-function generateOne(dir, relativePath, contents, callback) {
+function generateOne(dir: string, relativePath: string, contents: string, callback: Callback) {
   const fullPath = path.join(dir, relativePath.split('/').join(path.sep));
   if (!contents) return directory(fullPath, callback);
   mkdirp(path.dirname(fullPath), (err) => {
@@ -94,15 +96,17 @@ function generateOne(dir, relativePath, contents, callback) {
   });
 }
 
-function worker(dir, structure, callback) {
+function worker(dir: string, structure: Structure, callback: Callback): undefined {
   const queue = new Queue(1);
-  for (const relativePath in structure) {
-    queue.defer(generateOne.bind(null, dir, relativePath, structure[relativePath]));
-  }
+  for (const relativePath in structure) queue.defer(generateOne.bind(null, dir, relativePath, structure[relativePath]));
   queue.await(callback);
 }
 
-export default (dir, structure, callback) => {
+export default (dir: string, structure: Structure, callback: Callback): undefined | Promise<undefined> => {
   if (callback !== undefined) return worker(dir, structure, callback);
-  return new Promise((resolve, reject) => worker(dir, structure, (err) => (err ? reject(err) : resolve(undefined))));
+  return new Promise((resolve, reject) =>
+    worker(dir, structure, (err?: NodeJS.ErrnoException) => {
+      err ? reject(err) : resolve(undefined);
+    })
+  );
 };
