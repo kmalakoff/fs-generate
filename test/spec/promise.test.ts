@@ -1,15 +1,13 @@
 import assert from 'assert';
-import Pinkie from 'pinkie-promise';
-
 import type { Stats } from 'fs';
-import path from 'path';
-import url from 'url';
-import Iterator, { type Entry } from 'fs-iterator';
-import statsSpys from 'fs-stats-spys';
-import rimraf2 from 'rimraf2';
-
 // @ts-ignore
 import generate from 'fs-generate';
+import Iterator, { type Entry } from 'fs-iterator';
+import statsSpys from 'fs-stats-spys';
+import path from 'path';
+import Pinkie from 'pinkie-promise';
+import rimraf2 from 'rimraf2';
+import url from 'url';
 
 const __dirname = path.dirname(typeof __filename !== 'undefined' ? __filename : url.fileURLToPath(import.meta.url));
 const TEST_DIR = path.join(__dirname, '..', '..', '.tmp');
