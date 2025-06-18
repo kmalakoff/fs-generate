@@ -1,15 +1,12 @@
 import assert from 'assert';
-
-import type { Stats } from 'fs';
-import path from 'path';
-import url from 'url';
-import Iterator, { type Entry } from 'fs-iterator';
-import statsSpys from 'fs-stats-spys';
-import Queue from 'queue-cb';
-import rimraf2 from 'rimraf2';
-
 // @ts-ignore
 import generate from 'fs-generate';
+import Iterator, { type Entry } from 'fs-iterator';
+import statsSpys from 'fs-stats-spys';
+import path from 'path';
+import Queue from 'queue-cb';
+import rimraf2 from 'rimraf2';
+import url from 'url';
 
 const __dirname = path.dirname(typeof __filename !== 'undefined' ? __filename : url.fileURLToPath(import.meta.url));
 const TEST_DIR = path.join(__dirname, '..', '..', '.tmp');
@@ -35,7 +32,10 @@ describe('callback', () => {
     const spys = statsSpys();
 
     generate(TEST_DIR, STRUCTURE, (err) => {
-      if (err) return done(err.message);
+      if (err) {
+        done(err.message);
+        return;
+      }
 
       const iterator = new Iterator(TEST_DIR, { lstat: true });
       iterator.forEach(
@@ -43,7 +43,10 @@ describe('callback', () => {
           spys(entry.stats);
         },
         (err) => {
-          if (err) return done(err.message);
+          if (err) {
+            done(err.message);
+            return;
+          }
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 9);
           assert.equal(spys.link.callCount, 3);
@@ -58,7 +61,10 @@ describe('callback', () => {
       const spys = statsSpys();
 
       generate(TEST_DIR, STRUCTURE, (err) => {
-        if (err) return done(err.message);
+        if (err) {
+          done(err.message);
+          return;
+        }
 
         const iterator = new Iterator(TEST_DIR, { lstat: true });
         iterator.forEach(
@@ -66,7 +72,10 @@ describe('callback', () => {
             spys(entry.stats);
           },
           (err) => {
-            if (err) return done(err.message);
+            if (err) {
+              done(err.message);
+              return;
+            }
             assert.equal(spys.dir.callCount, 5);
             assert.equal(spys.file.callCount, 9);
             assert.equal(spys.link.callCount, 3);
