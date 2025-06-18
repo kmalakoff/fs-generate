@@ -1,10 +1,11 @@
-import path from 'path';
 import fs from 'graceful-fs';
 import mkdirp from 'mkdirp-classic';
+import path from 'path';
 import Queue from 'queue-cb';
 import rimraf2 from 'rimraf2';
 
 import fsCompat from './fs-compat/index.js';
+
 const STAT_OPTIONS = { bigint: process.platform === 'win32' || /^(msys|cygwin)$/.test(process.env.OSTYPE) };
 
 import type { Callback, Structure } from './types.js';
