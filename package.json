@@ -1,6 +1,6 @@
 {
   "name": "fs-generate",
-  "version": "1.9.22",
+  "version": "1.9.23",
   "description": "Utilities to set up file system structures (directories, files, and symlinks)",
   "keywords": [
     "fs",
