@@ -1,6 +1,6 @@
 import type fs from 'fs';
-import lstat from './lstat.js';
-import realpath from './realpath.js';
+import lstat from './lstat.ts';
+import realpath from './realpath.ts';
 
 function lstatReal(path, options, callback) {
   realpath(path, function realpathCallback(err, realpath) {

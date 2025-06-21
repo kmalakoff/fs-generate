@@ -1,9 +1,9 @@
 import type fs from 'fs';
-import lstat from './lstat.js';
-import lstatReal from './lstatReal.js';
-import readdir from './readdir.js';
-import realpath from './realpath.js';
-import stat from './stat.js';
+import lstat from './lstat.ts';
+import lstatReal from './lstatReal.ts';
+import readdir from './readdir.ts';
+import realpath from './realpath.ts';
+import stat from './stat.ts';
 
 export default {
   lstat: lstat as typeof fs.lstat,
