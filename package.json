@@ -42,7 +42,7 @@
     "graceful-fs": "^4.2.11",
     "mkdirp-classic": "^0.5.3",
     "pinkie-promise": "*",
-    "queue-cb": "^1.5.4",
+    "queue-cb": "^1.5.5",
     "rimraf2": "^2.8.2"
   },
   "devDependencies": {
