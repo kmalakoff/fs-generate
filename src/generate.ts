@@ -4,11 +4,11 @@ import path from 'path';
 import Queue from 'queue-cb';
 import rimraf2 from 'rimraf2';
 
-import fsCompat from './fs-compat/index.js';
+import fsCompat from './fs-compat/index.ts';
 
 const STAT_OPTIONS = { bigint: process.platform === 'win32' || /^(msys|cygwin)$/.test(process.env.OSTYPE) };
 
-import type { Callback, Structure } from './types.js';
+import type { Callback, Structure } from './types.ts';
 
 function directory(fullPath: string, callback: Callback) {
   fsCompat.lstat(fullPath, STAT_OPTIONS, (err, stat) => {
