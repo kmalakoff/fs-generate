@@ -1,2 +1,2 @@
-export { default } from './generate.js';
-export * from './types.js';
+export { default } from './generate.ts';
+export * from './types.ts';
