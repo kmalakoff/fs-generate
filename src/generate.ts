@@ -103,7 +103,7 @@ function worker(dir: string, structure: Structure, callback: Callback): undefine
   queue.await(callback);
 }
 
-export default (dir: string, structure: Structure, callback: Callback): undefined | Promise<undefined> => {
+export default (dir: string, structure: Structure, callback?: Callback): undefined | Promise<undefined> => {
   if (callback !== undefined) return worker(dir, structure, callback);
   return new Promise((resolve, reject) =>
     worker(dir, structure, (err?: NodeJS.ErrnoException) => {
