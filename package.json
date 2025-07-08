@@ -38,12 +38,12 @@
     "version": "tsds version"
   },
   "dependencies": {
-    "fs.realpath": "^1.0.0",
-    "graceful-fs": "^4.2.11",
-    "mkdirp-classic": "^0.5.3",
+    "fs.realpath": "*",
+    "graceful-fs": "*",
+    "mkdirp-classic": "*",
     "pinkie-promise": "*",
-    "queue-cb": "^1.5.5",
-    "rimraf2": "^2.8.2"
+    "queue-cb": "*",
+    "rimraf2": "*"
   },
   "devDependencies": {
     "@types/mocha": "*",
