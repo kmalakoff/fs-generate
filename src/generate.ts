@@ -1,8 +1,8 @@
+import { rm } from 'fs-remove-compat';
 import fs from 'graceful-fs';
 import mkdirp from 'mkdirp-classic';
 import path from 'path';
 import Queue from 'queue-cb';
-import rimraf2 from 'rimraf2';
 
 import fsCompat from './fs-compat/index.ts';
 
@@ -14,7 +14,7 @@ function directory(fullPath: string, callback: Callback) {
   fsCompat.lstat(fullPath, STAT_OPTIONS, (err, stat) => {
     if (err || !stat) mkdirp(fullPath, callback);
     else if (!stat.isDirectory()) {
-      rimraf2(fullPath, { disableGlob: true }, (err) => {
+      rm(fullPath, { recursive: true }, (err) => {
         err ? callback(err) : mkdirp(fullPath, callback);
       });
     } else callback();
@@ -25,7 +25,7 @@ function file(fullPath: string, contents: string, callback: Callback) {
   fsCompat.lstat(fullPath, STAT_OPTIONS, (err, stat) => {
     if (err || !stat) fs.writeFile(fullPath, contents, 'utf8', callback);
     else if (!stat.isFile()) {
-      rimraf2(fullPath, { disableGlob: true }, (err) => {
+      rm(fullPath, { recursive: true }, (err) => {
         err ? callback(err) : fs.writeFile(fullPath, contents, 'utf8', callback);
       });
     } else {
@@ -46,13 +46,13 @@ function symlink(targetFullPath: string, fullPath: string, callback: Callback) {
     fsCompat.lstat(fullPath, STAT_OPTIONS, (err, stat) => {
       if (err || !stat) fs.symlink(targetRelativePath, fullPath, type, callback);
       else if (!stat.isSymbolicLink()) {
-        rimraf2(fullPath, { disableGlob: true }, (err) => {
+        rm(fullPath, { recursive: true }, (err) => {
           err ? callback(err) : fs.symlink(targetRelativePath, fullPath, type, callback);
         });
       } else {
         fsCompat.realpath(fullPath, (err, realpath) => {
           if (err || realpath !== targetFullPath)
-            rimraf2(fullPath, { disableGlob: true }, (err) => {
+            rm(fullPath, { recursive: true }, (err) => {
               err ? callback(err) : fs.symlink(targetRelativePath, fullPath, type, callback);
             });
           else callback();
@@ -69,13 +69,13 @@ function link(targetFullPath: string, fullPath: string, callback: Callback) {
     fsCompat.lstat(fullPath, STAT_OPTIONS, (err, stat) => {
       if (err || !stat) fs.link(targetFullPath, fullPath, callback);
       else if (!stat.isFile()) {
-        rimraf2(fullPath, { disableGlob: true }, (err) => {
+        rm(fullPath, { recursive: true }, (err) => {
           err ? callback(err) : fs.link(targetFullPath, fullPath, callback);
         });
       } else {
         fsCompat.realpath(fullPath, (err, realpath) => {
           if (err || realpath !== targetFullPath)
-            rimraf2(fullPath, { disableGlob: true }, (err) => {
+            rm(fullPath, { recursive: true }, (err) => {
               err ? callback(err) : fs.link(targetFullPath, fullPath, callback);
             });
           else callback();

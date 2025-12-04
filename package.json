@@ -40,12 +40,12 @@
     "version": "tsds version"
   },
   "dependencies": {
+    "fs-remove-compat": "*",
     "fs.realpath": "*",
     "graceful-fs": "*",
     "mkdirp-classic": "*",
     "pinkie-promise": "*",
-    "queue-cb": "*",
-    "rimraf2": "*"
+    "queue-cb": "*"
   },
   "devDependencies": {
     "@types/mocha": "*",
