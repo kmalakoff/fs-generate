@@ -32,7 +32,7 @@ describe('callback', () => {
 
     generate(TEST_DIR, STRUCTURE, (err) => {
       if (err) {
-        done(err.message);
+        done(err);
         return;
       }
 
@@ -43,7 +43,7 @@ describe('callback', () => {
         },
         (err) => {
           if (err) {
-            done(err.message);
+            done(err);
             return;
           }
           assert.equal(spys.dir.callCount, 5);
@@ -61,7 +61,7 @@ describe('callback', () => {
 
       generate(TEST_DIR, STRUCTURE, (err) => {
         if (err) {
-          done(err.message);
+          done(err);
           return;
         }
 
@@ -72,7 +72,7 @@ describe('callback', () => {
           },
           (err) => {
             if (err) {
-              done(err.message);
+              done(err);
               return;
             }
             assert.equal(spys.dir.callCount, 5);
