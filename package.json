@@ -40,21 +40,21 @@
     "version": "tsds version"
   },
   "dependencies": {
-    "fs-remove-compat": "*",
-    "fs.realpath": "*",
-    "graceful-fs": "*",
-    "mkdirp-classic": "*",
-    "pinkie-promise": "*",
-    "queue-cb": "*"
+    "fs-remove-compat": "^0.2.1",
+    "fs.realpath": "^1.0.0",
+    "graceful-fs": "^4.2.11",
+    "mkdirp-classic": "^0.5.3",
+    "pinkie-promise": "^2.0.1",
+    "queue-cb": "^1.6.1"
   },
   "devDependencies": {
-    "@types/mocha": "*",
-    "@types/node": "*",
-    "fs-iterator": "*",
-    "fs-stats-spys": "*",
-    "node-version-use": "*",
-    "ts-dev-stack": "*",
-    "tsds-config": "*"
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^25.0.1",
+    "fs-iterator": "^6.1.10",
+    "fs-stats-spys": "^1.2.7",
+    "node-version-use": "^2.1.5",
+    "ts-dev-stack": "^1.21.3",
+    "tsds-config": "^0.2.1"
   },
   "engines": {
     "node": ">=0.8"

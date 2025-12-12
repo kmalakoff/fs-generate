@@ -36,7 +36,7 @@ describe('replace', () => {
 
       generate(TEST_DIR, MISMATCHED_STRUCTURE, (err) => {
         if (err) {
-          done(err.message);
+          done(err);
           return;
         }
 
@@ -47,7 +47,7 @@ describe('replace', () => {
           },
           (err) => {
             if (err) {
-              done(err.message);
+              done(err);
               return;
             }
             assert.equal(spys.dir.callCount, 7);
@@ -79,7 +79,7 @@ describe('replace', () => {
 
       generate(TEST_DIR, STRUCTURE, (err) => {
         if (err) {
-          done(err.message);
+          done(err);
           return;
         }
 
@@ -90,7 +90,7 @@ describe('replace', () => {
           },
           (err) => {
             if (err) {
-              done(err.message);
+              done(err);
               return;
             }
             assert.equal(spys.dir.callCount, 5);
