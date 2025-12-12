@@ -50,7 +50,7 @@
   "devDependencies": {
     "@types/mocha": "^10.0.10",
     "@types/node": "^25.0.1",
-    "fs-iterator": "^6.1.10",
+    "fs-iterator": "^6.1.11",
     "fs-stats-spys": "^1.2.8",
     "node-version-use": "^2.1.5",
     "ts-dev-stack": "^1.21.3",
