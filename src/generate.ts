@@ -6,7 +6,8 @@ import Queue from 'queue-cb';
 
 import fsCompat from './fs-compat/index.ts';
 
-const STAT_OPTIONS = { bigint: process.platform === 'win32' || /^(msys|cygwin)$/.test(process.env.OSTYPE) };
+const isWindows = process.platform === 'win32' || /^(msys|cygwin)$/.test(process.env.OSTYPE);
+const STAT_OPTIONS = { bigint: isWindows };
 
 import type { Callback, Structure } from './types.ts';
 
