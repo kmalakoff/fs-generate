@@ -49,12 +49,12 @@
   },
   "devDependencies": {
     "@types/mocha": "^10.0.10",
-    "@types/node": "^25.0.1",
-    "fs-iterator": "^6.1.11",
+    "@types/node": "^25.0.2",
+    "fs-iterator": "^6.1.12",
     "fs-stats-spys": "^1.2.9",
-    "node-version-use": "^2.1.5",
+    "node-version-use": "^2.1.7",
     "ts-dev-stack": "^1.21.3",
-    "tsds-config": "^0.2.1"
+    "tsds-config": "^0.2.2"
   },
   "engines": {
     "node": ">=0.8"
