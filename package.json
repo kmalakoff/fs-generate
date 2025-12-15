@@ -40,7 +40,7 @@
     "version": "tsds version"
   },
   "dependencies": {
-    "fs-remove-compat": "^0.2.3",
+    "fs-remove-compat": "^0.2.4",
     "fs.realpath": "^1.0.0",
     "graceful-fs": "^4.2.11",
     "mkdirp-classic": "^0.5.3",
