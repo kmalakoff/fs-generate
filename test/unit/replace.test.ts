@@ -42,7 +42,7 @@ describe('replace', () => {
 
         const iterator = new Iterator(TEST_DIR, { lstat: true });
         iterator.forEach(
-          (entry: Entry): undefined => {
+          (entry: Entry): void => {
             spys(entry.stats as Stats);
           },
           (err) => {
@@ -85,7 +85,7 @@ describe('replace', () => {
 
         const iterator = new Iterator(TEST_DIR, { lstat: true });
         iterator.forEach(
-          (entry: Entry): undefined => {
+          (entry: Entry): void => {
             spys(entry.stats as Stats);
           },
           (err) => {

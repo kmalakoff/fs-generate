@@ -98,17 +98,19 @@ function generateOne(dir: string, relativePath: string, contents: string, callba
   });
 }
 
-function worker(dir: string, structure: Structure, callback: Callback): undefined {
+function worker(dir: string, structure: Structure, callback: Callback) {
   const queue = new Queue(1);
   for (const relativePath in structure) queue.defer(generateOne.bind(null, dir, relativePath, structure[relativePath]));
   queue.await(callback);
 }
 
-export default (dir: string, structure: Structure, callback?: Callback): undefined | Promise<undefined> => {
+export default function generate(_dir: string, _structure: Structure, _callback: Callback): void;
+export default function generate(_dir: string, _structure: Structure): Promise<void>;
+export default function generate(dir: string, structure: Structure, callback?: Callback): void | Promise<void> {
   if (callback !== undefined) return worker(dir, structure, callback);
   return new Promise((resolve, reject) =>
     worker(dir, structure, (err?: NodeJS.ErrnoException) => {
-      err ? reject(err) : resolve(undefined);
+      err ? reject(err) : resolve();
     })
   );
-};
+}
