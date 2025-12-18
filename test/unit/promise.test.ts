@@ -44,7 +44,7 @@ describe('promise', () => {
 
     await generate(TEST_DIR, STRUCTURE);
     const iterator = new Iterator(TEST_DIR, { lstat: true });
-    await iterator.forEach((entry: Entry): undefined => {
+    await iterator.forEach((entry: Entry): void => {
       spys(entry.stats as Stats);
     });
     assert.equal(spys.dir.callCount, 5);
@@ -57,7 +57,7 @@ describe('promise', () => {
       const spys = statsSpys();
       await generate(TEST_DIR, STRUCTURE);
       const iterator = new Iterator(TEST_DIR, { lstat: true });
-      await iterator.forEach((entry: Entry): undefined => {
+      await iterator.forEach((entry: Entry): void => {
         spys(entry.stats as Stats);
       });
       assert.equal(spys.dir.callCount, 5);

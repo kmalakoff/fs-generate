@@ -38,7 +38,7 @@ describe('callback', () => {
 
       const iterator = new Iterator(TEST_DIR, { lstat: true });
       iterator.forEach(
-        (entry: Entry): undefined => {
+        (entry: Entry): void => {
           spys(entry.stats);
         },
         (err) => {
@@ -67,7 +67,7 @@ describe('callback', () => {
 
         const iterator = new Iterator(TEST_DIR, { lstat: true });
         iterator.forEach(
-          (entry: Entry): undefined => {
+          (entry: Entry): void => {
             spys(entry.stats);
           },
           (err) => {
