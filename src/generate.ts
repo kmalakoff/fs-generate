@@ -108,9 +108,5 @@ export default function generate(_dir: string, _structure: Structure, _callback:
 export default function generate(_dir: string, _structure: Structure): Promise<void>;
 export default function generate(dir: string, structure: Structure, callback?: Callback): void | Promise<void> {
   if (callback !== undefined) return worker(dir, structure, callback);
-  return new Promise((resolve, reject) =>
-    worker(dir, structure, (err?: NodeJS.ErrnoException) => {
-      err ? reject(err) : resolve();
-    })
-  );
+  return new Promise((resolve, reject) => worker(dir, structure, (err?: NodeJS.ErrnoException) => (err ? reject(err) : resolve())));
 }
