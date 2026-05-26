@@ -1,4 +1,5 @@
 import assert from 'assert';
+import type { Stats } from 'fs';
 import generate from 'fs-generate';
 import Iterator, { type Entry } from 'fs-iterator';
 import { safeRm } from 'fs-remove-compat';
@@ -31,21 +32,16 @@ describe('callback', () => {
     const spys = statsSpys();
 
     generate(TEST_DIR, STRUCTURE, (err) => {
-      if (err) {
-        done(err);
-        return;
-      }
+      if (err) return done(err);
 
       const iterator = new Iterator(TEST_DIR, { lstat: true });
       iterator.forEach(
         (entry: Entry): void => {
-          spys(entry.stats);
+          spys(entry.stats as Stats);
         },
         (err) => {
-          if (err) {
-            done(err);
-            return;
-          }
+          if (err) return done(err);
+
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 9);
           assert.equal(spys.link.callCount, 3);
@@ -56,25 +52,19 @@ describe('callback', () => {
   });
 
   it('should create the expected structure (twice)', (done) => {
-    function gen(done) {
+    function gen(done: (err?: Error) => void) {
       const spys = statsSpys();
 
       generate(TEST_DIR, STRUCTURE, (err) => {
-        if (err) {
-          done(err);
-          return;
-        }
+        if (err) return done(err);
 
         const iterator = new Iterator(TEST_DIR, { lstat: true });
         iterator.forEach(
           (entry: Entry): void => {
-            spys(entry.stats);
+            spys(entry.stats as Stats);
           },
           (err) => {
-            if (err) {
-              done(err);
-              return;
-            }
+            if (err) return done(err);
             assert.equal(spys.dir.callCount, 5);
             assert.equal(spys.file.callCount, 9);
             assert.equal(spys.link.callCount, 3);
