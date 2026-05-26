@@ -52,7 +52,7 @@ describe('callback', () => {
   });
 
   it('should create the expected structure (twice)', (done) => {
-    function gen(done: (err?: Error) => void) {
+    function gen(done: (err?: Error | null) => void) {
       const spys = statsSpys();
 
       generate(TEST_DIR, STRUCTURE, (err) => {

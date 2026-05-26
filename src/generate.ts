@@ -100,8 +100,8 @@ function generateOne(dir: string, relativePath: string, contents: string, callba
 
 function worker(dir: string, structure: Structure, callback: Callback) {
   const queue = new Queue(1);
-  for (const relativePath in structure) queue.defer((cb) => generateOne(dir, relativePath, structure[relativePath] as string, (err) => cb(err ?? undefined)));
-  queue.await((err) => callback(err ?? undefined));
+  for (const relativePath in structure) queue.defer((cb) => generateOne(dir, relativePath, structure[relativePath] as string, (err) => cb(err)));
+  queue.await((err) => callback(err));
 }
 
 export default function generate(_dir: string, _structure: Structure, _callback: Callback): void;
