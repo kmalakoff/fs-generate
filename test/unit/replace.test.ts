@@ -16,7 +16,7 @@ describe('replace', () => {
   beforeEach((cb) => safeRm(TEST_DIR, () => cb()));
 
   it('should create the expected structure (updating mis-matched)', (done) => {
-    function genMismatched(done: (err?: Error) => void) {
+    function genMismatched(done: (err?: Error | null) => void) {
       const spys = statsSpys();
 
       const MISMATCHED_STRUCTURE = {
@@ -53,7 +53,7 @@ describe('replace', () => {
       });
     }
 
-    function gen(done: (err?: Error) => void) {
+    function gen(done: (err?: Error | null) => void) {
       const spys = statsSpys();
 
       const STRUCTURE = {
