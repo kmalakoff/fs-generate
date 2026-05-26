@@ -47,6 +47,7 @@
     "queue-cb": "^1.0.0"
   },
   "devDependencies": {
+    "@types/graceful-fs": "^4.1.9",
     "@types/mocha": "*",
     "@types/node": "*",
     "fs-iterator": "^7.0.0",
