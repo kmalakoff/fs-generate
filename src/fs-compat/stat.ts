@@ -1,6 +1,6 @@
 import fs from 'fs';
 
-function statAddOptions(path, _options, callback) {
+function statAddOptions(path: fs.PathLike, _options: object | undefined, callback: (err: NodeJS.ErrnoException | null, stats?: fs.Stats) => void) {
   return fs.stat(path, callback);
 }
 

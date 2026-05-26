@@ -16,7 +16,7 @@ describe('replace', () => {
   beforeEach((cb) => safeRm(TEST_DIR, () => cb()));
 
   it('should create the expected structure (updating mis-matched)', (done) => {
-    function genMismatched(done) {
+    function genMismatched(done: (err?: Error) => void) {
       const spys = statsSpys();
 
       const MISMATCHED_STRUCTURE = {
@@ -35,10 +35,7 @@ describe('replace', () => {
       };
 
       generate(TEST_DIR, MISMATCHED_STRUCTURE, (err) => {
-        if (err) {
-          done(err);
-          return;
-        }
+        if (err) return done(err);
 
         const iterator = new Iterator(TEST_DIR, { lstat: true });
         iterator.forEach(
@@ -46,10 +43,7 @@ describe('replace', () => {
             spys(entry.stats as Stats);
           },
           (err) => {
-            if (err) {
-              done(err);
-              return;
-            }
+            if (err) return done(err);
             assert.equal(spys.dir.callCount, 7);
             assert.equal(spys.file.callCount, 6);
             assert.equal(spys.link.callCount, 2);
@@ -59,7 +53,7 @@ describe('replace', () => {
       });
     }
 
-    function gen(done) {
+    function gen(done: (err?: Error) => void) {
       const spys = statsSpys();
 
       const STRUCTURE = {
@@ -78,10 +72,7 @@ describe('replace', () => {
       };
 
       generate(TEST_DIR, STRUCTURE, (err) => {
-        if (err) {
-          done(err);
-          return;
-        }
+        if (err) return done(err);
 
         const iterator = new Iterator(TEST_DIR, { lstat: true });
         iterator.forEach(
@@ -89,10 +80,7 @@ describe('replace', () => {
             spys(entry.stats as Stats);
           },
           (err) => {
-            if (err) {
-              done(err);
-              return;
-            }
+            if (err) return done(err);
             assert.equal(spys.dir.callCount, 5);
             assert.equal(spys.file.callCount, 9);
             assert.equal(spys.link.callCount, 3);

@@ -4,14 +4,14 @@ import fs from 'fs';
 const parts = process.versions.node.split('.');
 const readdir =
   +parts[0] === 0 && +parts[1] <= 8
-    ? function readdirSort(path, callback) {
+    ? function readdirSort(path: fs.PathLike, callback: (err: NodeJS.ErrnoException | null, files?: string[]) => void) {
         fs.readdir(path, (err, files) => {
-          err ? callback(err) : callback(null, files.sort());
+          err ? callback(err) : callback(null, files?.sort());
         });
       }
     : fs.readdir;
 
-function readdirAddOptions(path, _options, callback) {
+function readdirAddOptions(path: fs.PathLike, _options: object | undefined, callback: (err: NodeJS.ErrnoException | null, files?: string[]) => void) {
   return readdir(path, callback);
 }
 

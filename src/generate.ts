@@ -6,7 +6,7 @@ import Queue from 'queue-cb';
 
 import fsCompat from './fs-compat/index.ts';
 
-const isWindows = process.platform === 'win32' || /^(msys|cygwin)$/.test(process.env.OSTYPE);
+const isWindows = process.platform === 'win32' || /^(msys|cygwin)$/.test(process.env.OSTYPE ?? '');
 const STAT_OPTIONS = { bigint: isWindows };
 
 import type { Callback, Structure } from './types.ts';
@@ -30,7 +30,7 @@ function file(fullPath: string, contents: string, callback: Callback) {
         err ? callback(err) : fs.writeFile(fullPath, contents, 'utf8', callback);
       });
     } else {
-      fs.readFile(fullPath, 'utf8', (err, existingContents) => {
+      fs.readFile(fullPath, 'utf8', (err: NodeJS.ErrnoException | null, existingContents?: string) => {
         if (err) callback(err);
         else if (existingContents !== contents) fs.writeFile(fullPath, contents, 'utf8', callback);
         else callback();
@@ -89,7 +89,7 @@ function link(targetFullPath: string, fullPath: string, callback: Callback) {
 function generateOne(dir: string, relativePath: string, contents: string, callback: Callback) {
   const fullPath = path.join(dir, relativePath.split('/').join(path.sep));
   if (!contents) return directory(fullPath, callback);
-  mkdirp(path.dirname(fullPath), (err) => {
+  mkdirp(path.dirname(fullPath), (err: Error | null) => {
     if (err) return callback(err);
 
     if (contents.length && contents[0] === '~') symlink(path.join(dir, contents.slice(1).split('/').join(path.sep)), fullPath, callback);
@@ -100,13 +100,13 @@ function generateOne(dir: string, relativePath: string, contents: string, callba
 
 function worker(dir: string, structure: Structure, callback: Callback) {
   const queue = new Queue(1);
-  for (const relativePath in structure) queue.defer(generateOne.bind(null, dir, relativePath, structure[relativePath]));
-  queue.await(callback);
+  for (const relativePath in structure) queue.defer((cb) => generateOne(dir, relativePath, structure[relativePath] as string, (err) => cb(err ?? undefined)));
+  queue.await((err) => callback(err ?? undefined));
 }
 
 export default function generate(_dir: string, _structure: Structure, _callback: Callback): void;
 export default function generate(_dir: string, _structure: Structure): Promise<void>;
 export default function generate(dir: string, structure: Structure, callback?: Callback): void | Promise<void> {
   if (callback !== undefined) return worker(dir, structure, callback);
-  return new Promise((resolve, reject) => worker(dir, structure, (err?: NodeJS.ErrnoException) => (err ? reject(err) : resolve())));
+  return new Promise((resolve, reject) => worker(dir, structure, (err) => (err ? reject(err) : resolve())));
 }
