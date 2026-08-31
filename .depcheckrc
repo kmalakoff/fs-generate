@@ -1,1 +1,1 @@
-ignores: ["node-version-use", "ts-dev-stack", "fs-generate"]
+ignores: ["fs-generate", "node-version-use", "ts-dev-stack"]
