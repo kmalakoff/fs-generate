@@ -7,18 +7,27 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Mocha",
-      "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
-      "args": ["--timeout", "999999", "--colors", "${workspaceFolder}/test/spec/**/*.test.js"],
+      "name": "mocha",
+      "program": "${workspaceFolder}/node_modules/mocha-compat/bin/_mocha-compat",
+      "args": ["--no-timeouts", "--colors", "${workspaceFolder}/test/spec/**/*.test.js"],
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen"
     },
     {
       "type": "node",
       "request": "launch",
-      "name": "Mocha Compat",
-      "program": "${workspaceFolder}/node_modules/mocha-compat/bin/_mocha-compat",
-      "args": ["--timeout", "999999", "--colors", "${workspaceFolder}/test/spec/**/*.test.js"],
+      "name": "memory",
+      "cwd": "${workspaceFolder}/performance",
+      "program": "${workspaceFolder}/performance/memory/index.js",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "ops",
+      "cwd": "${workspaceFolder}/performance",
+      "program": "${workspaceFolder}/performance/operations/index.js",
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen"
     }

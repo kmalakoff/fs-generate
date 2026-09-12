@@ -1,18 +1,17 @@
 var assert = require('assert');
 
 var path = require('path');
-var rimraf = require('rimraf2');
+var rimraf = require('rimraf');
 var Iterator = require('fs-iterator');
 var Queue = require('queue-cb');
 var statsSpys = require('fs-stats-spys');
 
 var generate = require('../..');
 
-var DIR = path.join(__dirname, 'dest');
+var TEST_DIR = path.join(__dirname, '..', '..', '.tmp');
 
 describe('replace', function () {
-  beforeEach(rimraf.bind(null, DIR));
-  after(rimraf.bind(null, DIR));
+  beforeEach(rimraf.bind(null, TEST_DIR));
 
   it('should create the expected structure (updating mis-matched)', function (done) {
     function genMismatched(done) {
@@ -31,10 +30,10 @@ describe('replace', function () {
         'dir3/dir4/dirlink1': null,
       };
 
-      generate(DIR, MISMATCHED_STRUCTURE, function (err) {
+      generate(TEST_DIR, MISMATCHED_STRUCTURE, function (err) {
         assert.ok(!err);
 
-        var iterator = new Iterator(DIR, { lstat: true });
+        var iterator = new Iterator(TEST_DIR, { lstat: true });
         iterator.forEach(
           function (entry) {
             spys(entry.stats);
@@ -66,10 +65,10 @@ describe('replace', function () {
         'dir3/dir4/dirlink1': '~dir2',
       };
 
-      generate(DIR, STRUCTURE, function (err) {
+      generate(TEST_DIR, STRUCTURE, function (err) {
         assert.ok(!err);
 
-        var iterator = new Iterator(DIR, { lstat: true });
+        var iterator = new Iterator(TEST_DIR, { lstat: true });
         iterator.forEach(
           function (entry) {
             spys(entry.stats);
