@@ -21,8 +21,8 @@
   "scripts": {
     "format": "prettier --write .",
     "lint": "eslint . --ext js,mjs",
-    "test": "mocha-compat test/spec/**/*.test.js",
-    "prepublish": "dtd \"npm run lint\" \"depcheck --ignores='depcheck'\""
+    "prepublishOnly": "dtd \"npm run lint\" \"depcheck\"",
+    "test": "mocha-compat test/spec/**/*.test.js"
   },
   "dependencies": {
     "async-each-series": "^1.1.0",
@@ -37,7 +37,7 @@
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-config-standard": "^14.1.1",
-    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-import": "^2.21.2",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
