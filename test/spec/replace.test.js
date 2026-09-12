@@ -5,8 +5,9 @@ var path = require('path');
 var remove = require('remove');
 var walk = require('walk-filtered');
 var Queue = require('queue-cb');
+var statsSpys = require('fs-stats-spys');
+
 var generate = require('../..');
-var statsSpys = require('../utils').statsSpys;
 
 var DIR = path.join(__dirname, 'dest');
 
@@ -41,7 +42,7 @@ describe('replace', function () {
         walk(
           DIR,
           function (entry) {
-            spys(entry.stats, entry.path);
+            spys(entry.stats);
           },
           { alwaysStat: true },
           function (err) {
@@ -77,7 +78,7 @@ describe('replace', function () {
         walk(
           DIR,
           function (entry) {
-            spys(entry.stats, entry.path);
+            spys(entry.stats);
           },
           { alwaysStat: true },
           function (err) {

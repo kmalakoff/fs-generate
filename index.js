@@ -4,16 +4,12 @@ var remove = require('remove');
 var mkdirp = require('mkdirp');
 var eachSeries = require('async-each-series');
 
-function startsWith(string, start) {
-  return typeof string === 'string' && string.substring(0, start.length) === start;
-}
-
 function directory(path, callback) {
   fs.lstat(path, function (err, stat) {
     if (err || !stat) mkdirp(path, callback);
     else if (!stat.isDirectory())
       remove(path, function (err) {
-        err ? callback(err) : mkdirp(path, callback);
+        err ? callback(err) : mkdirp(path, { recursive: true }, callback);
       });
     else callback();
   });
@@ -65,11 +61,11 @@ function generate(dir, structure, callback) {
       var contents = structure[relativePath];
       if (!contents) return directory(fullPath, callback);
 
-      mkdirp(path.dirname(fullPath), function (err) {
+      mkdirp(path.dirname(fullPath), { recursive: true }, function (err) {
         if (err) return callback(err);
 
-        if (!startsWith(contents, '~')) file(fullPath, contents, callback);
-        else symlink(path.join(dir, contents.slice(1).split('/').join(path.sep)), fullPath, callback);
+        if (contents.length && contents[0] === '~') symlink(path.join(dir, contents.slice(1).split('/').join(path.sep)), fullPath, callback);
+        else file(fullPath, contents, callback);
       });
     },
     callback
