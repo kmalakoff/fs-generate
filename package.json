@@ -18,7 +18,7 @@
   "license": "MIT",
   "author": "Kevin Malakoff <kmalakoff@gmail.com> (https://github.com/kmalakoff)",
   "main": "dist/cjs/index.cjs",
-  "types": "dist/types/index.d.ts",
+  "types": "dist/cjs/index.d.cts",
   "files": [
     "dist"
   ],
@@ -34,7 +34,7 @@
     "graceful-fs": "^4.2.11",
     "mkdirp-classic": "^0.5.3",
     "pinkie-promise": "*",
-    "queue-cb": "^1.4.16",
+    "queue-cb": "^1.4.17",
     "rimraf2": "^2.8.2"
   },
   "devDependencies": {
