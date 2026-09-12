@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha test/spec/**/*.test.js",
-    "compat": "nvs 14 12 10 8 6 4 0.12 0.10 0.8 -- mocha-compat test/spec/**/*.test.js",
+    "compat": "nvs 14,12,10,8,6,4,0.12,0.10,0.8 mocha-compat test/spec/**/*.test.js",
     "lint": "eslint . --ext js,mjs",
     "format": "prettier --write '**/*.{js,mjs}'"
   },
@@ -26,7 +26,7 @@
   "homepage": "https://github.com/kmalakoff/fs-generate#readme",
   "dependencies": {
     "async-each-series": "^1.1.0",
-    "mkdirp": "^0.5.5",
+    "mkdirp": "^1.0.4",
     "remove": "^0.1.5"
   },
   "devDependencies": {
@@ -39,12 +39,12 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
+    "fs-stats-spys": "^1.0.0",
     "mocha": "^7.1.2",
     "mocha-compat": "^3.5.5",
-    "nvs": "^0.1.1",
+    "nvs": "^0.1.6",
     "prettier": "^2.0.5",
-    "queue-cb": "^1.1.1",
-    "sinon": "^2.4.1",
+    "queue-cb": "^1.1.2",
     "walk-filtered": "^2.4.4"
   }
 }
